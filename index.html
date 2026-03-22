@@ -263,7 +263,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2026/03/21/ccsssc2026_mail_system%E5%A4%8D%E7%8E%B0/" target="_self">
         <div>
-          
+          ccsssc2026_MailSystem复现题目分析  保护全开，沙箱禁了execve和execveat 一个邮件系统 PWN 题，程序提供用户注册&#x2F;登录、收发邮件功能，以及管理员转发邮件等操作。  普通用户菜单：写草稿、读收件箱、发信、登出 管理员菜单：改用户、删用户、代发邮件、用户间转发邮件  数据结构分析users和admin的指针都在.bss上，每个8字节。巧的是，上面就是st
         </div>
       </a>
 
@@ -303,7 +303,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025/12/22/ret2dlsolve/" target="_self">
         <div>
-          
+          ret2dlsolve(not yet completed)什么时候用？大read（最好溢出100字节以上），没有syscall gadgets（用不了ret2syscall和SROP），没法泄露libc地址的情况下，可以考虑ret2dlsolve。 准备源码： 1234567891011121314151617181920212223242526#include &lt;unistd.h&gt;
         </div>
       </a>
 
