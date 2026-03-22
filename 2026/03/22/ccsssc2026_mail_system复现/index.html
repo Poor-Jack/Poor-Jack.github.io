@@ -19,12 +19,12 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-    <meta name="description" content="题目分析  保护全开，沙箱禁了execve和execveat 一个邮件系统 PWN 题，程序提供用户注册&#x2F;登录、收发邮件功能，以及管理员转发邮件等操作。  普通用户菜单：写草稿、读收件箱、发信、登出 管理员菜单：改用户、删用户、代发邮件、用户间转发邮件  数据结构分析users和admin的指针都在.bss上，每个8字节。巧的是，上面就是stderr指针  这里已经为后续的利用提供了参考">
+    <meta name="description" content="ccsssc2026_MailSystem复现题目分析  保护全开，沙箱禁了execve和execveat 一个邮件系统 PWN 题，程序提供用户注册&#x2F;登录、收发邮件功能，以及管理员转发邮件等操作。  普通用户菜单：写草稿、读收件箱、发信、登出 管理员菜单：改用户、删用户、代发邮件、用户间转发邮件  数据结构分析users和admin的指针都在.bss上，每个8字节。巧的是，上面就是st">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hexo">
 <meta property="og:url" content="http://example.com/2026/03/22/ccsssc2026_mail_system%E5%A4%8D%E7%8E%B0/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="题目分析  保护全开，沙箱禁了execve和execveat 一个邮件系统 PWN 题，程序提供用户注册&#x2F;登录、收发邮件功能，以及管理员转发邮件等操作。  普通用户菜单：写草稿、读收件箱、发信、登出 管理员菜单：改用户、删用户、代发邮件、用户间转发邮件  数据结构分析users和admin的指针都在.bss上，每个8字节。巧的是，上面就是stderr指针  这里已经为后续的利用提供了参考">
+<meta property="og:description" content="ccsssc2026_MailSystem复现题目分析  保护全开，沙箱禁了execve和execveat 一个邮件系统 PWN 题，程序提供用户注册&#x2F;登录、收发邮件功能，以及管理员转发邮件等操作。  普通用户菜单：写草稿、读收件箱、发信、登出 管理员菜单：改用户、删用户、代发邮件、用户间转发邮件  数据结构分析users和admin的指针都在.bss上，每个8字节。巧的是，上面就是st">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/img/ccsssc2026_mail/1.png">
 <meta property="og:image" content="http://example.com/img/ccsssc2026_mail/2.png">
@@ -37,7 +37,7 @@
 <meta property="og:image" content="http://example.com/img/ccsssc2026_mail/9.png">
 <meta property="og:image" content="http://example.com/img/ccsssc2026_mail/10.png">
 <meta property="article:published_time" content="2026-03-22T03:27:46.228Z">
-<meta property="article:modified_time" content="2026-03-22T03:41:07.346Z">
+<meta property="article:modified_time" content="2026-03-22T03:44:10.441Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://example.com/img/ccsssc2026_mail/1.png">
@@ -269,7 +269,7 @@
         
         
         
-          164 mins
+          165 mins
         
       </span>
     
@@ -313,7 +313,7 @@
             
               <div class="markdown-body">
                 
-                <h2 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h2><p><img src="/img/ccsssc2026_mail/1.png" srcset="/img/loading.gif" lazyload></p>
+                <h1 id="ccsssc2026-MailSystem复现"><a href="#ccsssc2026-MailSystem复现" class="headerlink" title="ccsssc2026_MailSystem复现"></a>ccsssc2026_MailSystem复现</h1><h2 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h2><p><img src="/img/ccsssc2026_mail/1.png" srcset="/img/loading.gif" lazyload></p>
 <p><img src="/img/ccsssc2026_mail/2.png" srcset="/img/loading.gif" lazyload></p>
 <p>保护全开，沙箱禁了execve和execveat</p>
 <p>一个邮件系统 PWN 题，程序提供用户注册&#x2F;登录、收发邮件功能，以及管理员转发邮件等操作。</p>
@@ -650,6 +650,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2026/03/22/ret2dlsolve/" title="">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
