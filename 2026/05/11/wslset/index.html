@@ -1,0 +1,755 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="基于wsl的pwn环境配置安装wsl2使用管理员权限在powershell中输入如下命令来启动适用于Linux的Windows子系统：dism.exe &#x2F;online &#x2F;enable-feature &#x2F;featurename:Microsoft-Windows-Subsystem-Linux &#x2F;all &#x2F;norestart 查看windows版本，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于wsl的pwn环境配置">
+<meta property="og:url" content="http://example.com/2026/05/11/wslset/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="基于wsl的pwn环境配置安装wsl2使用管理员权限在powershell中输入如下命令来启动适用于Linux的Windows子系统：dism.exe &#x2F;online &#x2F;enable-feature &#x2F;featurename:Microsoft-Windows-Subsystem-Linux &#x2F;all &#x2F;norestart 查看windows版本，">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/wslset/1.png">
+<meta property="og:image" content="http://example.com/img/wslset/2.png">
+<meta property="article:published_time" content="2026-05-11T12:48:02.000Z">
+<meta property="article:modified_time" content="2026-05-11T13:00:11.999Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="tools">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/wslset/1.png">
+  
+  
+  
+  <title>基于wsl的pwn环境配置 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>poorjack&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>Search</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="Light"
+               data-label-dark="Dark">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">Dark</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="基于wsl的pwn环境配置"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-05-11 20:48" pubdate>
+          May 11, 2026 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          18k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          150 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">基于wsl的pwn环境配置</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    Last updated on May 11, 2026 pm
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="基于wsl的pwn环境配置"><a href="#基于wsl的pwn环境配置" class="headerlink" title="基于wsl的pwn环境配置"></a>基于wsl的pwn环境配置</h1><h2 id="安装wsl2"><a href="#安装wsl2" class="headerlink" title="安装wsl2"></a>安装wsl2</h2><p>使用管理员权限在powershell中输入如下命令来启动适用于Linux的Windows子系统：<br>dism.exe &#x2F;online &#x2F;enable-feature &#x2F;featurename:Microsoft-Windows-Subsystem-Linux &#x2F;all &#x2F;norestart</p>
+<p>查看windows版本，需要大于1903</p>
+<p>使用管理员权限在powershell中输入以下命令：<br>dism.exe &#x2F;online &#x2F;enable-feature &#x2F;featurename:VirtualMachinePlatform &#x2F;all &#x2F;norestart</p>
+<p>访问<a target="_blank" rel="noopener" href="https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi">这里</a>来下载和安装wsl2内核组件。若无法安装则重启。</p>
+<p>访问<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/wsl/install-manual#downloading-distributions">这里</a>来下载一个wsl2的发行版，本文档基于Ubuntu 22.04 LTS。</p>
+<p>下载后会得到一个名为Ubuntuxx04-xxxxx.AppxBundle文件，将其后缀名AppxBundle更改为zip，并将其解压。</p>
+<p>解压后会得到一系列包括appx的文件，找到其中的Ubuntu_xx04.x.x.x_x64.appx文件（别的文件不需要了），将其后缀名更改为zip并解压。</p>
+<p>解压后会得到一系列文件，都是需要的，运行ubuntu.exe，即可安装得到wsl2子系统了。</p>
+<p>有问题可以查阅<a target="_blank" rel="noopener" href="https://docs.eesast.com/docs/tools/wsl">这里</a></p>
+<h2 id="配置wsl2"><a href="#配置wsl2" class="headerlink" title="配置wsl2"></a>配置wsl2</h2><p>以下内容自行选择</p>
+<h3 id="apt换源"><a href="#apt换源" class="headerlink" title="apt换源"></a>apt换源</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> /etc/apt<br></code></pre></td></tr></table></figure>
+<p>其中sources.list 就是源网址<br>我们先备份： sudo mv &#x2F;etc&#x2F;apt&#x2F;sources.list &#x2F;etc&#x2F;apt&#x2F;sources.list.bak<br>然后 sudo vim sources.list<br>按i进编译，然后输入</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs clean"># Ubuntu <span class="hljs-number">22.04</span> Jammy 国内清华镜像源<br><br># 二进制软件包<br>deb https:<span class="hljs-comment">//mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy main restricted universe multiverse</span><br>deb https:<span class="hljs-comment">//mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-updates main restricted universe multiverse</span><br>deb https:<span class="hljs-comment">//mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse</span><br>deb https:<span class="hljs-comment">//mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-security main restricted universe multiverse</span><br><br># 源码包 (默认注释，如需启用去掉前面的 #)<br># deb-src https:<span class="hljs-comment">//mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy main restricted universe multiverse</span><br># deb-src https:<span class="hljs-comment">//mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-updates main restricted universe multiverse</span><br># deb-src https:<span class="hljs-comment">//mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse</span><br># deb-src https:<span class="hljs-comment">//mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-security main restricted universe multiverse</span><br></code></pre></td></tr></table></figure>
+<p>按esc : w q 回车 保存并退出<br>然后 sudo apt update 看看有没有成功换源</p>
+<h3 id="装zsh"><a href="#装zsh" class="headerlink" title="装zsh"></a>装zsh</h3><p>sudo apt install zsh -y<br>设置默认终端： chsh -s &#x2F;bin&#x2F;zsh</p>
+<p>退出wsl后执行 wsl –shutdown<br>再wsl 进来，显示如图<br><img src="/img/wslset/1.png" srcset="/img/loading.gif" lazyload><br>我们先选2 慢慢配 ~&#x2F;.zshrc 文件</p>
+<p>下载oh-my-zsh: </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sh -c <span class="hljs-string">&quot;<span class="hljs-subst">$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)</span>&quot;</span><br></code></pre></td></tr></table></figure>
+<p><img src="/img/wslset/2.png" srcset="/img/loading.gif" lazyload><br>配置参考：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Clone this repo</span><br>git <span class="hljs-built_in">clone</span> https://github.com/spaceship-prompt/spaceship-prompt.git <span class="hljs-string">&quot;<span class="hljs-variable">$ZSH_CUSTOM</span>/themes/spaceship-prompt&quot;</span> --depth=1<br><span class="hljs-comment"># Symlink to your oh-my-zsh custom themes directory</span><br><span class="hljs-built_in">ln</span> -s <span class="hljs-string">&quot;<span class="hljs-variable">$ZSH_CUSTOM</span>/themes/spaceship-prompt/spaceship.zsh-theme&quot;</span> <span class="hljs-string">&quot;<span class="hljs-variable">$ZSH_CUSTOM</span>/themes/spaceship.zsh-theme&quot;</span><br></code></pre></td></tr></table></figure>
+<p>然后修改 ~&#x2F;.zshrc </p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><br><span class="hljs-built_in">export</span> <span class="hljs-attribute">ZSH</span>=<span class="hljs-string">&quot;<span class="hljs-variable">$HOME</span>/.oh-my-zsh&quot;</span><br><br><span class="hljs-attribute">ZSH_THEME</span>=<span class="hljs-string">&quot;spaceship&quot;</span><br><br><span class="hljs-comment"># 配置 spaceship-prompt</span><br>SPACESHIP_PROMPT_ORDER=(<br> <span class="hljs-built_in"> user </span>         # 用户名<br>  host          # 主机名<br>  dir           # 当前目录<br>  time          # 时间<br>  git           # Git 信息<br>  node          # Node.js 版本<br>  package       # 包信息<br>  exec_time     # 命令执行时间<br>  battery       # 电池状态<br>  exit_code     # 退出代码<br>  char          # 提示符字符<br>)<br><br><span class="hljs-comment"># 时间设置</span><br><span class="hljs-attribute">SPACESHIP_TIME_SHOW</span>=<span class="hljs-literal">true</span><br><span class="hljs-attribute">SPACESHIP_TIME_FORMAT</span>=<span class="hljs-string">&quot;%D&#123;%H:%M:%S&#125;&quot;</span><br><span class="hljs-attribute">SPACESHIP_TIME_COLOR</span>=<span class="hljs-string">&quot;yellow&quot;</span><br><br><span class="hljs-comment"># 用户设置 - 配置为显示前缀[</span><br><span class="hljs-attribute">SPACESHIP_USER_SHOW</span>=always<br><span class="hljs-attribute">SPACESHIP_USER_COLOR</span>=<span class="hljs-string">&quot;green&quot;</span><br><span class="hljs-attribute">SPACESHIP_USER_SUFFIX</span>=<span class="hljs-string">&quot;&quot;</span><br><br><span class="hljs-comment"># 主机设置 - 配置为显示@和后缀]</span><br><span class="hljs-attribute">SPACESHIP_HOST_SHOW</span>=always<br><span class="hljs-attribute">SPACESHIP_HOST_COLOR</span>=<span class="hljs-string">&quot;magenta&quot;</span><br><span class="hljs-attribute">SPACESHIP_HOST_PREFIX</span>=<span class="hljs-string">&quot;@&quot;</span><br><span class="hljs-attribute">SPACESHIP_HOST_SUFFIX</span>=<span class="hljs-string">&quot; : &quot;</span><br><br><span class="hljs-comment"># 目录设置</span><br><span class="hljs-attribute">SPACESHIP_DIR_SHOW</span>=<span class="hljs-literal">true</span><br><span class="hljs-attribute">SPACESHIP_DIR_TRUNC</span>=3<br><span class="hljs-attribute">SPACESHIP_DIR_COLOR</span>=<span class="hljs-string">&quot;cyan&quot;</span><br><span class="hljs-attribute">SPACESHIP_DIR_PREFIX</span>=<span class="hljs-string">&quot;&quot;</span>  # 设为空字符串移除<span class="hljs-string">&quot;in&quot;</span><br><span class="hljs-attribute">SPACESHIP_DIR_SUFFIX</span>=<span class="hljs-string">&quot; &quot;</span><br><br><span class="hljs-comment"># Git 设置</span><br><span class="hljs-attribute">SPACESHIP_GIT_SHOW</span>=<span class="hljs-literal">true</span><br><span class="hljs-attribute">SPACESHIP_GIT_PREFIX</span>=<span class="hljs-string">&quot;on &quot;</span><br><span class="hljs-attribute">SPACESHIP_GIT_SUFFIX</span>=<span class="hljs-string">&quot; &quot;</span><br><span class="hljs-attribute">SPACESHIP_GIT_BRANCH_COLOR</span>=<span class="hljs-string">&quot;blue&quot;</span><br><span class="hljs-attribute">SPACESHIP_GIT_STATUS_COLOR</span>=<span class="hljs-string">&quot;red&quot;</span><br><span class="hljs-attribute">SPACESHIP_GIT_STATUS_UNTRACKED</span>=<span class="hljs-string">&quot;?&quot;</span><br><span class="hljs-attribute">SPACESHIP_GIT_STATUS_ADDED</span>=<span class="hljs-string">&quot;+&quot;</span><br><span class="hljs-attribute">SPACESHIP_GIT_STATUS_MODIFIED</span>=<span class="hljs-string">&quot;!&quot;</span><br><span class="hljs-attribute">SPACESHIP_GIT_STATUS_RENAMED</span>=<span class="hljs-string">&quot;»&quot;</span><br><span class="hljs-attribute">SPACESHIP_GIT_STATUS_DELETED</span>=<span class="hljs-string">&quot;✘&quot;</span><br><span class="hljs-attribute">SPACESHIP_GIT_STATUS_STASHED</span>=<span class="hljs-string">&quot;$&quot;</span><br><span class="hljs-attribute">SPACESHIP_GIT_STATUS_UNMERGED</span>=<span class="hljs-string">&quot;=&quot;</span><br><span class="hljs-attribute">SPACESHIP_GIT_STATUS_AHEAD</span>=<span class="hljs-string">&quot;⇡&quot;</span><br><span class="hljs-attribute">SPACESHIP_GIT_STATUS_BEHIND</span>=<span class="hljs-string">&quot;⇣&quot;</span><br><span class="hljs-attribute">SPACESHIP_GIT_STATUS_DIVERGED</span>=<span class="hljs-string">&quot;⇕&quot;</span><br><br><span class="hljs-comment"># 语言环境设置</span><br><span class="hljs-attribute">SPACESHIP_NODE_SHOW</span>=<span class="hljs-literal">true</span><br><span class="hljs-attribute">SPACESHIP_NODE_COLOR</span>=<span class="hljs-string">&quot;green&quot;</span><br><span class="hljs-attribute">SPACESHIP_NODE_PREFIX</span>=<span class="hljs-string">&quot;using &quot;</span><br><span class="hljs-attribute">SPACESHIP_NODE_SUFFIX</span>=<span class="hljs-string">&quot; &quot;</span><br><span class="hljs-attribute">SPACESHIP_NODE_SYMBOL</span>=<span class="hljs-string">&quot;⬢ &quot;</span><br><br><span class="hljs-comment"># 提示符字符设置</span><br><span class="hljs-attribute">SPACESHIP_DIR_SHOW</span>=<span class="hljs-literal">true</span><br><span class="hljs-attribute">SPACESHIP_CHAR_SYMBOL</span>=<span class="hljs-string">&quot;$ &quot;</span><br><span class="hljs-attribute">SPACESHIP_CHAR_PREFIX</span>=<span class="hljs-string">&quot;\n&quot;</span><br><span class="hljs-attribute">SPACESHIP_CHAR_COLOR_SUCCESS</span>=<span class="hljs-string">&quot;green&quot;</span><br><span class="hljs-attribute">SPACESHIP_CHAR_COLOR_FAILURE</span>=<span class="hljs-string">&quot;red&quot;</span><br><span class="hljs-attribute">SPACESHIP_CHAR_COLOR_SECONDARY</span>=<span class="hljs-string">&quot;yellow&quot;</span><br><br><span class="hljs-comment"># 退出代码设置</span><br><span class="hljs-attribute">SPACESHIP_EXIT_CODE_SHOW</span>=<span class="hljs-literal">true</span><br><span class="hljs-attribute">SPACESHIP_EXIT_CODE_SYMBOL</span>=<span class="hljs-string">&quot;✘ &quot;</span><br><br><span class="hljs-comment"># 电池状态设置</span><br><span class="hljs-attribute">SPACESHIP_BATTERY_SHOW</span>=always<br><span class="hljs-attribute">SPACESHIP_BATTERY_THRESHOLD</span>=10<br><span class="hljs-attribute">SPACESHIP_BATTERY_COLOR_CHARGING</span>=<span class="hljs-string">&quot;green&quot;</span><br><span class="hljs-attribute">SPACESHIP_BATTERY_COLOR_CHARGED</span>=<span class="hljs-string">&quot;green&quot;</span><br><span class="hljs-attribute">SPACESHIP_BATTERY_COLOR_DISCHARGING</span>=<span class="hljs-string">&quot;yellow&quot;</span><br><span class="hljs-attribute">SPACESHIP_BATTERY_SYMBOL_CHARGING</span>=<span class="hljs-string">&quot;↑&quot;</span><br><span class="hljs-attribute">SPACESHIP_BATTERY_SYMBOL_CHARGED</span>=<span class="hljs-string">&quot;●&quot;</span><br><span class="hljs-attribute">SPACESHIP_BATTERY_SYMBOL_DISCHARGING</span>=<span class="hljs-string">&quot;↓&quot;</span><br><br><span class="hljs-comment"># 命令执行时间设置</span><br><span class="hljs-attribute">SPACESHIP_EXEC_TIME_SHOW</span>=<span class="hljs-literal">true</span><br><span class="hljs-attribute">SPACESHIP_EXEC_TIME_PREFIX</span>=<span class="hljs-string">&quot;took &quot;</span><br><span class="hljs-attribute">SPACESHIP_EXEC_TIME_SUFFIX</span>=<span class="hljs-string">&quot; &quot;</span><br><span class="hljs-attribute">SPACESHIP_EXEC_TIME_COLOR</span>=<span class="hljs-string">&quot;yellow&quot;</span><br><span class="hljs-attribute">SPACESHIP_EXEC_TIME_THRESHOLD</span>=500<br><span class="hljs-attribute">SPACESHIP_EXEC_TIME_FORMAT</span>=<span class="hljs-string">&quot;%dms&quot;</span><br><br><span class="hljs-comment"># 插件</span><br>plugins=(<br>  git<br>  zsh-autosuggestions        # 自动补全<br>  zsh-syntax-highlighting    # 语法高亮<br>)<br><br>source <span class="hljs-variable">$ZSH</span>/oh-my-zsh.sh<br><span class="hljs-comment"># 使用包管理器安装需要加上</span><br><span class="hljs-comment">#source /usr/lib/spaceship-prompt/spaceship.zsh</span><br></code></pre></td></tr></table></figure>
+<h3 id="装乱七八糟"><a href="#装乱七八糟" class="headerlink" title="装乱七八糟"></a>装乱七八糟</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#基础包</span><br><span class="hljs-built_in">sudo</span> apt update &amp;&amp; <span class="hljs-built_in">sudo</span> apt install -y --fix-missing python3 python3-pip python3-dev lib32z1 \<br>xinetd curl gcc expect gdb gdbserver g++ git libssl-dev libffi-dev build-essential tmux zstd \<br>vim netcat tldr liblzma-dev iputils-ping cpio gdb-multiarch file net-tools socat ruby ruby-dev locales \<br>autoconf automake libtool make zsh openssh-server openssh-client ipython3 \<br>gdb-multiarch bison pkg-config <br><br><span class="hljs-comment">#qemu相关, 需要的话取消注释</span><br><span class="hljs-comment">#sudo apt install qemu qemu-system qemu-user-static binfmt-support</span><br><br><span class="hljs-comment">#ruby</span><br><span class="hljs-built_in">sudo</span> gem install one_gadget seccomp-tools<br><br><span class="hljs-comment">#其他</span><br><span class="hljs-built_in">sudo</span> apt install patchelf<br><br><span class="hljs-comment"># 下载并安装 Rust</span><br>curl --proto <span class="hljs-string">&#x27;=https&#x27;</span> --tlsv1.2 -sSf https://sh.rustup.rs | sh<br><span class="hljs-comment">#https://github.com/io12/pwninit</span><br>cargo install pwninit<br><br><span class="hljs-comment"># python包</span><br>python3 -m pip install --upgrade pip &amp;&amp; \<br>pip3 install ropper capstone unicorn keystone-engine z3-solver qiling lief libnum pycryptodome angr trash-cli <br><br><span class="hljs-comment">#回主目录</span><br><span class="hljs-built_in">cd</span> ~<br><br><span class="hljs-comment">#杂七杂八的github项目</span><br><span class="hljs-built_in">export</span> HUB_DOMAIN=github.com<br><br>git <span class="hljs-built_in">clone</span> https://<span class="hljs-variable">$&#123;HUB_DOMAIN&#125;</span>/pwndbg/pwndbg &amp;&amp; \<br><span class="hljs-built_in">cd</span> ./pwndbg &amp;&amp; \<br>./setup.sh &amp;&amp; \<br><span class="hljs-built_in">cd</span> <span class="hljs-variable">$HOME</span> &amp;&amp; \<br><span class="hljs-comment">#git clone https://$&#123;HUB_DOMAIN&#125;/hugsy/gef.git &amp;&amp; \</span><br>git <span class="hljs-built_in">clone</span> https://<span class="hljs-variable">$&#123;HUB_DOMAIN&#125;</span>/RoderickChan/Pwngdb.git &amp;&amp; \<br>git <span class="hljs-built_in">clone</span> https://<span class="hljs-variable">$&#123;HUB_DOMAIN&#125;</span>/Gallopsled/pwntools &amp;&amp; \<br>pip3 install --upgrade --editable ./pwntools &amp;&amp; \<br>git <span class="hljs-built_in">clone</span> https://<span class="hljs-variable">$&#123;HUB_DOMAIN&#125;</span>/RoderickChan/pwncli.git &amp;&amp; \<br>pip3 install --upgrade --editable ./pwncli &amp;&amp; \<br>git <span class="hljs-built_in">clone</span> https://<span class="hljs-variable">$&#123;HUB_DOMAIN&#125;</span>/marin-m/vmlinux-to-elf.git &amp;&amp; \    <span class="hljs-comment">#没研究</span><br>git <span class="hljs-built_in">clone</span> https://<span class="hljs-variable">$&#123;HUB_DOMAIN&#125;</span>/JonathanSalwan/ROPgadget.git &amp;&amp; \<br><span class="hljs-built_in">cd</span> ./ROPgadget &amp;&amp; \<br><span class="hljs-built_in">sudo</span> python3 -m pip install . &amp;&amp; \<br><span class="hljs-built_in">cd</span> <span class="hljs-variable">$HOME</span><br><br><span class="hljs-comment">#======== tmux配置文件</span><br><span class="hljs-built_in">cat</span> &gt; ~/.tmux.conf &lt;&lt; <span class="hljs-string">&quot;EOF&quot;</span><br><span class="hljs-built_in">set</span> -g prefix C-a <span class="hljs-comment">#</span><br>unbind C-b <span class="hljs-comment"># C-b即Ctrl+b键，unbind意味着解除绑定</span><br><span class="hljs-built_in">bind</span> C-a send-prefix <span class="hljs-comment"># 绑定Ctrl+a为新的指令前缀</span><br><br><span class="hljs-comment"># 设置保存的buffer大小</span><br><span class="hljs-built_in">set</span> -g history-limit 5000<br><span class="hljs-comment"># 关闭自动重命名</span><br>setw -g automatic-rename off<br>setw -g allow-rename off<br><span class="hljs-comment"># 增加鼠标支持</span><br><span class="hljs-built_in">set</span> -g mouse on<br><span class="hljs-comment"># 使用vi风格</span><br>setw -g mode-keys vi<br><br><span class="hljs-comment"># 从tmux v1.6版起，支持设置第二个指令前缀</span><br>set-option -g prefix2 ` <span class="hljs-comment"># 设置一个不常用的`键作为指令前缀，按键更快一些</span><br><span class="hljs-comment">#set-option -g mouse on # 开启鼠标支持</span><br><span class="hljs-comment"># 修改分屏快捷键</span><br>unbind <span class="hljs-string">&#x27;&quot;&#x27;</span><br><span class="hljs-built_in">bind</span> - splitw -v -c <span class="hljs-string">&#x27;#&#123;pane_current_path&#125;&#x27;</span> <span class="hljs-comment"># 垂直方向新增面板，默认进入当前目录</span><br>unbind %<br><span class="hljs-built_in">bind</span> \\ splitw -h -c <span class="hljs-string">&#x27;#&#123;pane_current_path&#125;&#x27;</span> <span class="hljs-comment"># 水平方向新增面板，默认进入当前目录</span><br><br><span class="hljs-comment"># 设置面板大小调整快捷键</span><br><span class="hljs-built_in">bind</span> j resize-pane -D 10<br><span class="hljs-built_in">bind</span> k resize-pane -U 10<br><span class="hljs-built_in">bind</span> h resize-pane -L 10<br><span class="hljs-built_in">bind</span> l resize-pane -R 10<br><span class="hljs-built_in">bind</span> 1 next-window<br>EOF<br><br><span class="hljs-comment"># 安装musl</span><br><span class="hljs-built_in">sudo</span> apt install musl-dev musl-tools<br><span class="hljs-built_in">cd</span> <span class="hljs-variable">$HOME</span><br>wget https://musl.libc.org/releases/musl-1.2.3.tar.gz<br>tar -xvzf musl-1.2.3.tar.gz<br><span class="hljs-built_in">cd</span> musl-1.2.3<br>CC=<span class="hljs-string">&quot;gcc&quot;</span> CXX=<span class="hljs-string">&quot;g++&quot;</span> CFLAGS=<span class="hljs-string">&quot;-g -g3 -ggdb -gdwarf-4 -Og -Wno-error -z now&quot;</span> CXXFLAGS=<span class="hljs-string">&quot;-g -g3 -ggdb -gdwarf-4 -Og -Wno-error -z now&quot;</span> ./configure --enable-debug --disable-werror<br>make -j8<br><span class="hljs-built_in">sudo</span> make install<br><br><span class="hljs-comment">#继续</span><br>omz reload<br>pwncli misc setgdb -g <span class="hljs-comment">##gdb-pwndbg xxx</span><br><span class="hljs-built_in">cd</span> <span class="hljs-variable">$HOME</span><br><span class="hljs-comment"># 安装decomp2dbg</span><br>git <span class="hljs-built_in">clone</span> https://github.com/mahaloz/decomp2dbg.git<br><span class="hljs-built_in">cd</span> decomp2dbg <br><span class="hljs-comment"># 记得拷贝文件</span><br><span class="hljs-comment"># cp ./decomp2dbg/d2d_server.py /path/to/ida/plugins/</span><br>pip3 install . &amp;&amp; \<br><span class="hljs-built_in">cp</span> ./decomp2dbg/d2d_client.py ~/.d2d.py &amp;&amp; <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;source ~/.d2d.py&quot;</span> &gt;&gt; ~/.gdbinit<br><span class="hljs-comment">######我decomp2dbg一直没装成功，不知道为什么...</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="写dbgsym"><a href="#写dbgsym" class="headerlink" title="写dbgsym"></a>写dbgsym</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/env python3</span><br><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">import</span> re<br><span class="hljs-keyword">from</span> os <span class="hljs-keyword">import</span> system,popen,chdir, environ<br><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> pause<br><br>log_info = <span class="hljs-keyword">lambda</span> s: <span class="hljs-built_in">print</span>(<span class="hljs-string">f&#x27;[\033[1;36m*\033[0m] <span class="hljs-subst">&#123;s&#125;</span>&#x27;</span>)<br>log_success = <span class="hljs-keyword">lambda</span> s: <span class="hljs-built_in">print</span>(<span class="hljs-string">f&#x27;[\033[1;32m√\033[0m] <span class="hljs-subst">&#123;s&#125;</span>&#x27;</span>)<br>log_fail = <span class="hljs-keyword">lambda</span> s: <span class="hljs-built_in">print</span>(<span class="hljs-string">f&#x27;[\033[1;31m×\033[0m] <span class="hljs-subst">&#123;s&#125;</span>&#x27;</span>)<br>underline = <span class="hljs-keyword">lambda</span> s: <span class="hljs-string">f&#x27;\033[4m<span class="hljs-subst">&#123;s&#125;</span>\033[0m&#x27;</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">set_libc_env</span>(<span class="hljs-params">filename</span>):<br><br>	<span class="hljs-keyword">def</span> <span class="hljs-title function_">get_data_tar_name</span>(<span class="hljs-params">deb_filename</span>):<br>		output = popen(<span class="hljs-string">f&#x27;ar t &quot;<span class="hljs-subst">&#123;deb_filename&#125;</span>&quot;&#x27;</span>).read()<br>		<span class="hljs-keyword">if</span> <span class="hljs-string">&#x27;data.tar.xz&#x27;</span> <span class="hljs-keyword">in</span> output:<br>			<span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;data.tar.xz&#x27;</span><br>		<span class="hljs-keyword">elif</span> <span class="hljs-string">&#x27;data.tar.zst&#x27;</span> <span class="hljs-keyword">in</span> output:<br>			<span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;data.tar.zst&#x27;</span><br>		<span class="hljs-keyword">else</span>:<br>			log_fail(<span class="hljs-string">f&#x27;Unsupported archive format in <span class="hljs-subst">&#123;deb_filename&#125;</span>&#x27;</span>)<br>			clean()<br>			exit(<span class="hljs-number">1</span>)<br><br>	<span class="hljs-keyword">def</span> <span class="hljs-title function_">get_arch</span>(<span class="hljs-params">filename</span>):<br>		data = popen(<span class="hljs-string">f&#x27;readelf -h &quot;<span class="hljs-subst">&#123;filename&#125;</span>&quot;&#x27;</span>).read()<br>		<span class="hljs-keyword">if</span> <span class="hljs-string">&#x27;X86-64&#x27;</span> <span class="hljs-keyword">in</span> data:<br>			<span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;amd64&#x27;</span><br>		<span class="hljs-keyword">elif</span> <span class="hljs-string">&#x27;80386&#x27;</span> <span class="hljs-keyword">in</span> data:<br>			<span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;i386&#x27;</span><br>		<span class="hljs-keyword">elif</span> <span class="hljs-string">&#x27;ARM&#x27;</span> <span class="hljs-keyword">in</span> data:<br>			<span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;armhf&#x27;</span><br>		<span class="hljs-keyword">elif</span> <span class="hljs-string">&#x27;AArch64&#x27;</span> <span class="hljs-keyword">in</span> data:<br>			<span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;arm64&#x27;</span><br>		<span class="hljs-keyword">elif</span> <span class="hljs-string">&#x27;PowerPC64&#x27;</span> <span class="hljs-keyword">in</span> data:<br>			<span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;ppc64el&#x27;</span><br>		<span class="hljs-keyword">elif</span> <span class="hljs-string">&#x27;IBM S/390&#x27;</span> <span class="hljs-keyword">in</span> data:<br>			<span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;s390x&#x27;</span><br>		<span class="hljs-keyword">else</span>:<br>			log_fail(<span class="hljs-string">f&#x27;unsupported arch&#x27;</span>)<br>			clean()<br>			exit(<span class="hljs-number">1</span>)<br><br>	<span class="hljs-keyword">def</span> <span class="hljs-title function_">get_ver</span>(<span class="hljs-params">filename</span>):<br>		data = popen(<span class="hljs-string">f&#x27;strings &quot;<span class="hljs-subst">&#123;filename&#125;</span>&quot; | grep &quot;GNU C Library&quot;&#x27;</span>).read()<br>		<span class="hljs-keyword">try</span>:<br>			ver = re.search(<span class="hljs-string">r&#x27;GLIBC (.*?)\)&#x27;</span>, data).group(<span class="hljs-number">1</span>)<br>		<span class="hljs-keyword">except</span>:<br>			log_fail(<span class="hljs-string">f&#x27;can\&#x27;t find ubuntu glibc version&#x27;</span>)<br>			clean()<br>			exit(<span class="hljs-number">1</span>)<br>		<span class="hljs-keyword">return</span> ver<br><br>	<span class="hljs-keyword">def</span> <span class="hljs-title function_">get_buildid</span>(<span class="hljs-params">filename</span>):<br>		data = popen(<span class="hljs-string">f&#x27;readelf --notes &quot;<span class="hljs-subst">&#123;filename&#125;</span>&quot; | grep &quot;Build ID&quot;&#x27;</span>).read()<br>		<span class="hljs-keyword">try</span>:<br>			buildid = re.search(<span class="hljs-string">r&#x27;Build ID: (\w+)&#x27;</span>,data).group(<span class="hljs-number">1</span>)<br>		<span class="hljs-keyword">except</span>:<br>			log_fail(<span class="hljs-string">f&#x27;can\&#x27;t find glibc buildid&#x27;</span>)<br>			clean()<br>			exit(<span class="hljs-number">1</span>)<br>		<span class="hljs-keyword">return</span> buildid<br><br>	<span class="hljs-keyword">def</span> <span class="hljs-title function_">find_dist</span>(<span class="hljs-params">ver</span>):<br>		url = <span class="hljs-string">f&#x27;https://launchpad.net/ubuntu/+source/glibc/<span class="hljs-subst">&#123;ver&#125;</span>&#x27;</span><br>		r = requests.get(url)<br>		<span class="hljs-keyword">try</span>:<br>			dist = re.search(<span class="hljs-string">r&#x27;&lt;a href=&quot;/ubuntu/(\w+)&quot;&gt;&#x27;</span>, r.text).group(<span class="hljs-number">1</span>)<br>		<span class="hljs-keyword">except</span>:<br>			log_fail(<span class="hljs-string">f&#x27;can\&#x27;t find ubuntu dist&#x27;</span>)<br>			clean()<br>			exit(<span class="hljs-number">1</span>)<br>		<span class="hljs-keyword">return</span> dist<br><br>	<span class="hljs-keyword">def</span> <span class="hljs-title function_">find_libc_dbg_url</span>(<span class="hljs-params">dist,arch,ver</span>):<br>		url = <span class="hljs-string">f&#x27;https://launchpad.net/ubuntu/<span class="hljs-subst">&#123;dist&#125;</span>/<span class="hljs-subst">&#123;arch&#125;</span>/libc6-dbg/<span class="hljs-subst">&#123;ver&#125;</span>&#x27;</span><br>		r = requests.get(url)<br>		<span class="hljs-keyword">try</span>:<br>			dl_url = re.search(<span class="hljs-string">r&#x27;&lt;a class=&quot;sprite&quot; href=&quot;(.*?)&quot;&gt;&#x27;</span>, r.text).group(<span class="hljs-number">1</span>)<br>		<span class="hljs-keyword">except</span>:<br>			log_fail(<span class="hljs-string">f&#x27;can\&#x27;t find libc-dbg download url&#x27;</span>)<br>			clean()<br>			exit(<span class="hljs-number">1</span>)<br>		<span class="hljs-keyword">return</span> dl_url<br><br>	<span class="hljs-keyword">def</span> <span class="hljs-title function_">find_libc_dbgsym_url_i386_amd64</span>(<span class="hljs-params">dist,arch,ver</span>):<br>		url = <span class="hljs-string">f&#x27;https://launchpad.net/ubuntu/<span class="hljs-subst">&#123;dist&#125;</span>/amd64/libc6-i386-dbgsym/<span class="hljs-subst">&#123;ver&#125;</span>&#x27;</span><br>		r = requests.get(url)<br>		<span class="hljs-keyword">try</span>:<br>			dl_url = re.search(<span class="hljs-string">r&#x27;&lt;a class=&quot;sprite&quot; href=&quot;(.*?)&quot;&gt;&#x27;</span>, r.text).group(<span class="hljs-number">1</span>)<br>		<span class="hljs-keyword">except</span>:<br>			log_fail(<span class="hljs-string">f&#x27;can\&#x27;t find libc-dbg download url&#x27;</span>)<br>			clean()<br>			exit(<span class="hljs-number">1</span>)<br>		<span class="hljs-keyword">return</span> dl_url<br><br>	<span class="hljs-keyword">def</span> <span class="hljs-title function_">find_libc_bin_url</span>(<span class="hljs-params">dist,arch,ver</span>):<br>		url = <span class="hljs-string">f&#x27;https://launchpad.net/ubuntu/<span class="hljs-subst">&#123;dist&#125;</span>/<span class="hljs-subst">&#123;arch&#125;</span>/libc6/<span class="hljs-subst">&#123;ver&#125;</span>&#x27;</span><br>		r = requests.get(url)<br>		<span class="hljs-keyword">try</span>:<br>			dl_url = re.search(<span class="hljs-string">r&#x27;&lt;a class=&quot;sprite&quot; href=&quot;(.*?)&quot;&gt;&#x27;</span>, r.text).group(<span class="hljs-number">1</span>)<br>		<span class="hljs-keyword">except</span>:<br>			log_fail(<span class="hljs-string">f&#x27;can\&#x27;t find libc download url&#x27;</span>)<br>			clean()<br>			exit(<span class="hljs-number">1</span>)<br>		<span class="hljs-keyword">return</span> dl_url<br><br>	<span class="hljs-keyword">def</span> <span class="hljs-title function_">find_libc_bin_url_i386_amd64</span>(<span class="hljs-params">dist,arch,ver</span>):<br>		url = <span class="hljs-string">f&#x27;https://launchpad.net/ubuntu/<span class="hljs-subst">&#123;dist&#125;</span>/amd64/libc6-i386/<span class="hljs-subst">&#123;ver&#125;</span>&#x27;</span><br>		r = requests.get(url)<br>		<span class="hljs-keyword">try</span>:<br>			dl_url = re.search(<span class="hljs-string">r&#x27;&lt;a class=&quot;sprite&quot; href=&quot;(.*?)&quot;&gt;&#x27;</span>, r.text).group(<span class="hljs-number">1</span>)<br>		<span class="hljs-keyword">except</span>:<br>			log_fail(<span class="hljs-string">f&#x27;can\&#x27;t find libc download url&#x27;</span>)<br>			clean()<br>			exit(<span class="hljs-number">1</span>)<br>		<span class="hljs-keyword">return</span> dl_url<br><br>	<span class="hljs-keyword">def</span> <span class="hljs-title function_">move_dbgysm</span>(<span class="hljs-params">filename,buildid</span>):<br>		target_dir = <span class="hljs-string">f&#x27;/usr/lib/debug/.build-id/<span class="hljs-subst">&#123;buildid[:<span class="hljs-number">2</span>]&#125;</span>&#x27;</span><br>		target_name = <span class="hljs-string">f&#x27;/usr/lib/debug/.build-id/<span class="hljs-subst">&#123;buildid[:<span class="hljs-number">2</span>]&#125;</span>/<span class="hljs-subst">&#123;buildid[<span class="hljs-number">2</span>:]&#125;</span>.debug&#x27;</span><br>		log_info(<span class="hljs-string">f&#x27;moving dbgsym to <span class="hljs-subst">&#123;underline(target_name)&#125;</span>&#x27;</span>)<br>		system(<span class="hljs-string">f&#x27;sudo mkdir -p <span class="hljs-subst">&#123;target_dir&#125;</span>&#x27;</span>)<br>		system(<span class="hljs-string">f&#x27;sudo cp <span class="hljs-subst">&#123;filename&#125;</span> <span class="hljs-subst">&#123;target_name&#125;</span>&#x27;</span>)<br>		recheck_buildid = get_buildid(target_name)<br>		<span class="hljs-keyword">if</span> recheck_buildid != buildid:<br>			log_fail(<span class="hljs-string">f&#x27;move dbgsym fail&#x27;</span>)<br>			clean()<br>			exit(<span class="hljs-number">1</span>)<br>		log_success(<span class="hljs-string">f&#x27;move dbgsym done!!&#x27;</span>)<br><br>	<span class="hljs-keyword">def</span> <span class="hljs-title function_">clean</span>():<br>		log_info(<span class="hljs-string">f&#x27;cleaning...&#x27;</span>)<br>		system(<span class="hljs-string">f&#x27;cd ..;rm -rf &quot;<span class="hljs-subst">&#123;version&#125;</span>_tmp&quot;&#x27;</span>)<br><br>	arch = get_arch(filename)<br>	log_info(<span class="hljs-string">f&#x27;find libc arch: <span class="hljs-subst">&#123;underline(arch)&#125;</span>&#x27;</span>)<br>	version = get_ver(filename)<br>	log_info(<span class="hljs-string">f&#x27;find libc version: <span class="hljs-subst">&#123;underline(version)&#125;</span>&#x27;</span>)<br>	buildid = get_buildid(filename)<br>	log_info(<span class="hljs-string">f&#x27;find libc buildid: <span class="hljs-subst">&#123;underline(buildid)&#125;</span>&#x27;</span>)<br>	dist = find_dist(version)<br>	log_info(<span class="hljs-string">f&#x27;find ubuntu dist: <span class="hljs-subst">&#123;underline(dist)&#125;</span>&#x27;</span>)<br>	system(<span class="hljs-string">f&#x27;rm -rf &quot;<span class="hljs-subst">&#123;version&#125;</span>_tmp&quot;&#x27;</span>)<br>	system(<span class="hljs-string">f&#x27;mkdir -p &quot;<span class="hljs-subst">&#123;version&#125;</span>_tmp&quot;&#x27;</span>)<br>	chdir(<span class="hljs-string">f&#x27;<span class="hljs-subst">&#123;version&#125;</span>_tmp&#x27;</span>)<br>	<span class="hljs-comment"># set dbgsym</span><br>	amd64_ver_i386 = <span class="hljs-literal">False</span><br>	libc_dbg_url = find_libc_dbg_url(dist,arch,version)<br>	log_info(<span class="hljs-string">f&#x27;find libc-dbg url: <span class="hljs-subst">&#123;underline(libc_dbg_url)&#125;</span>&#x27;</span>)<br>	system(<span class="hljs-string">f&#x27;wget <span class="hljs-subst">&#123;libc_dbg_url&#125;</span> -O libc6-dbg.deb&#x27;</span>)<br><br>	<span class="hljs-comment"># 文件名可能为data.tar.zst</span><br>	data_tar_name = get_data_tar_name(<span class="hljs-string">&#x27;libc6-dbg.deb&#x27;</span>)<br>	system(<span class="hljs-string">f&#x27;ar -x libc6-dbg.deb <span class="hljs-subst">&#123;data_tar_name&#125;</span>&#x27;</span>)<br>	system(<span class="hljs-string">f&#x27;mkdir -p libc6-dbg&#x27;</span>)<br><br>	<span class="hljs-keyword">if</span> data_tar_name == <span class="hljs-string">&#x27;data.tar.xz&#x27;</span>:<br>		<span class="hljs-comment"># system(f&#x27;ar -x libc6-dbg.deb data.tar.xz&#x27;)</span><br>		<span class="hljs-comment"># system(f&#x27;tar -xf data.tar.xz -C ./libc6-dbg&#x27;)</span><br>		system(<span class="hljs-string">f&#x27;tar -xf <span class="hljs-subst">&#123;data_tar_name&#125;</span> -C ./libc6-dbg&#x27;</span>)<br>	<span class="hljs-keyword">elif</span> data_tar_name == <span class="hljs-string">&#x27;data.tar.zst&#x27;</span>:<br>		system(<span class="hljs-string">f&#x27;zstd -d data.tar.zst -o data_dbg.tar&#x27;</span>)<br>		system(<span class="hljs-string">f&#x27;tar -xf data_dbg.tar -C ./libc6-dbg&#x27;</span>)<br><br>	dbgsym_filename = popen(<span class="hljs-string">f&#x27;find libc6-dbg -name &quot;libc-*.so&quot; -or -name &quot;<span class="hljs-subst">&#123;buildid[<span class="hljs-number">2</span>:]&#125;</span>.debug&quot; -type f | grep -v prof&#x27;</span>).read().strip()<br>	dbg_buildid = get_buildid(dbgsym_filename)<br>	<span class="hljs-keyword">if</span> dbg_buildid != buildid:<br>		log_fail(<span class="hljs-string">f&#x27;dbgsym buildid not match: <span class="hljs-subst">&#123;underline(dbg_buildid)&#125;</span>&#x27;</span>)<br>		<span class="hljs-keyword">if</span> arch != <span class="hljs-string">&#x27;i386&#x27;</span>:<br>			clean()<br>			exit(<span class="hljs-number">1</span>)<br>		<span class="hljs-keyword">else</span>:<br>			log_info(<span class="hljs-string">f&#x27;try to fetch amd64 build version of libc6-i386-dbgsym&#x27;</span>)<br>		libc_dbgsym_url = find_libc_dbgsym_url_i386_amd64(dist,arch,version)<br>		log_info(<span class="hljs-string">f&#x27;find libc6-i386-dbgsym url: <span class="hljs-subst">&#123;underline(libc_dbgsym_url)&#125;</span>&#x27;</span>)<br>		system(<span class="hljs-string">f&#x27;wget <span class="hljs-subst">&#123;libc_dbgsym_url&#125;</span> -O libc6-i386-dbgsym.ddeb&#x27;</span>)<br><br>		<span class="hljs-comment"># 文件名可能为data.tar.zst</span><br>		data_tar_name = get_data_tar_name(<span class="hljs-string">&#x27;libc6-i386-dbgsym.ddeb&#x27;</span>)<br>		system(<span class="hljs-string">f&#x27;ar -x libc6-i386-dbgsym.ddeb <span class="hljs-subst">&#123;data_tar_name&#125;</span>&#x27;</span>)<br><br>		system(<span class="hljs-string">f&#x27;mkdir -p libc6-i386-dbgsym&#x27;</span>)<br>		<span class="hljs-keyword">if</span> data_tar_name == <span class="hljs-string">&#x27;data.tar.xz&#x27;</span>:<br>			<span class="hljs-comment"># system(f&#x27;ar -x libc6-i386-dbgsym.ddeb data.tar.xz&#x27;)</span><br>			<span class="hljs-comment"># system(f&#x27;tar -xf data.tar.xz -C ./libc6-i386-dbgsym&#x27;)</span><br>			system(<span class="hljs-string">f&#x27;tar -xf <span class="hljs-subst">&#123;data_tar_name&#125;</span> -C ./libc6-i386-dbgsym&#x27;</span>)<br>		<span class="hljs-keyword">elif</span> data_tar_name == <span class="hljs-string">&#x27;data.tar.zst&#x27;</span>:<br>			system(<span class="hljs-string">f&#x27;zstd -d data.tar.zst -o data.tar&#x27;</span>)<br>			system(<span class="hljs-string">f&#x27;tar -xf data.tar -C ./libc6-i386-dbgsym&#x27;</span>)<br>		<br>		dbgsym_filename = popen(<span class="hljs-string">f&#x27;find libc6-i386-dbgsym -name &quot;<span class="hljs-subst">&#123;buildid[<span class="hljs-number">2</span>:]&#125;</span>.debug&quot; -type f&#x27;</span>).read().strip()<br>		dbg_buildid = get_buildid(dbgsym_filename)<br>		<span class="hljs-keyword">if</span> dbg_buildid != buildid:<br>			log_fail(<span class="hljs-string">f&#x27;dbgsym buildid not match: <span class="hljs-subst">&#123;underline(dbg_buildid)&#125;</span>&#x27;</span>)<br>			clean()<br>			exit(<span class="hljs-number">1</span>)<br>		amd64_ver_i386=<span class="hljs-literal">True</span><br>	log_success(<span class="hljs-string">f&#x27;find dbgsym!!&#x27;</span>)<br>	move_dbgysm(dbgsym_filename,dbg_buildid)<br>	<span class="hljs-comment"># download ld.so</span><br>	<span class="hljs-keyword">if</span> amd64_ver_i386:<br>		libc_bin_url = find_libc_bin_url_i386_amd64(dist,arch,version)<br>	<span class="hljs-keyword">else</span>:<br>		libc_bin_url = find_libc_bin_url(dist,arch,version)<br>	log_info(<span class="hljs-string">f&#x27;find libc-bin url: <span class="hljs-subst">&#123;underline(libc_bin_url)&#125;</span>&#x27;</span>)<br>	system(<span class="hljs-string">f&#x27;wget <span class="hljs-subst">&#123;libc_bin_url&#125;</span> -O libc6.deb&#x27;</span>)<br><br>	<span class="hljs-comment"># 文件名可能为data.tar.zst</span><br>	data_tar_name = get_data_tar_name(<span class="hljs-string">&#x27;libc6.deb&#x27;</span>)<br>	system(<span class="hljs-string">f&#x27;ar -x libc6.deb <span class="hljs-subst">&#123;data_tar_name&#125;</span>&#x27;</span>)<br><br>	system(<span class="hljs-string">f&#x27;mkdir -p libc6&#x27;</span>)<br>	<span class="hljs-keyword">if</span> data_tar_name == <span class="hljs-string">&#x27;data.tar.xz&#x27;</span>:<br>		<span class="hljs-comment"># system(f&#x27;ar -x libc6.deb data.tar.xz&#x27;)</span><br>		<span class="hljs-comment"># system(f&#x27;tar -xf data.tar.xz -C ./libc6&#x27;)</span><br>		system(<span class="hljs-string">f&#x27;tar -xf <span class="hljs-subst">&#123;data_tar_name&#125;</span> -C ./libc6&#x27;</span>)<br>	<span class="hljs-keyword">elif</span> data_tar_name == <span class="hljs-string">&#x27;data.tar.zst&#x27;</span>:<br>		system(<span class="hljs-string">f&#x27;zstd -d data.tar.zst -o data.tar&#x27;</span>)<br>		system(<span class="hljs-string">f&#x27;tar -xf data.tar -C ./libc6&#x27;</span>)<br><br>	ld_filename = popen(<span class="hljs-string">f&#x27;find libc6 -name &quot;ld-*.so*&quot; -type f&#x27;</span>).read().strip()<br>	log_success(<span class="hljs-string">f&#x27;find ld.so!!&#x27;</span>)<br>	system(<span class="hljs-string">f&#x27;cp &quot;<span class="hljs-subst">&#123;ld_filename&#125;</span>&quot; ../&#x27;</span>)<br>	clean()<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>	<span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(sys.argv) == <span class="hljs-number">1</span>:<br>		<span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Download libc dbgsym and ld.so&#x27;</span>)<br>		<span class="hljs-built_in">print</span>(<span class="hljs-string">f&#x27;Usage: python3 <span class="hljs-subst">&#123;sys.argv[<span class="hljs-number">0</span>]&#125;</span> &lt;target_libc.so&gt;&#x27;</span>)<br>	<span class="hljs-keyword">else</span>:<br>		environ[<span class="hljs-string">&#x27;http_proxy&#x27;</span>] = <span class="hljs-string">&#x27;http://127.0.0.1:7890&#x27;</span><br>		environ[<span class="hljs-string">&#x27;https_proxy&#x27;</span>] = <span class="hljs-string">&#x27;http://127.0.0.1:7890&#x27;</span><br>		set_libc_env(sys.argv[<span class="hljs-number">1</span>])<br></code></pre></td></tr></table></figure>
+
+<p>将其命名为dbgsym，并置入环境变量的目录例如&#x2F;usr&#x2F;bin内（需要root权限），即可使用如下方式来下载某个libc文件对于的debug symbol和ld：</p>
+<p>dbgsym .&#x2F;libc.so.6</p>
+<p>完成后，通过pwncli的init功能自动patch两个文件：</p>
+<p>pwncli init</p>
+<h3 id="glibc相关"><a href="#glibc相关" class="headerlink" title="glibc相关"></a>glibc相关</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#glibc-all-in-one</span><br>git <span class="hljs-built_in">clone</span> https://github.com/cnwangjihe/glibc-all-in-one<br><span class="hljs-built_in">cd</span> glibc-all-in-one<br>./update_list<br>./download all<br><span class="hljs-comment">#libc本地搜索匹配</span><br>git <span class="hljs-built_in">clone</span> https://github.com/niklasb/libc-database<br><span class="hljs-built_in">cd</span> libc-database<br>./get ubuntu  <span class="hljs-comment">#很慢</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="docker-desktop"><a href="#docker-desktop" class="headerlink" title="docker desktop"></a>docker desktop</h3><p>settings resource 改成wsl<br>然后改docker engine</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;builder&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;gc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;defaultKeepStorage&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;20GB&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;enabled&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;experimental&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;registry-mirrors&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>    <span class="hljs-string">&quot;https://docker-0.unsee.tech&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;https://docker.1panel.live&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;https://docker.imgdb.de&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;https://hub.firefly.store&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;https://docker.m.daocloud.io&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;https://dockerproxy.com&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;https://docker.mirrors.sjtug.sjtu.edu.cn&quot;</span><br>  <span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/tools/" class="print-no-link">#tools</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>基于wsl的pwn环境配置</div>
+      <div>http://example.com/2026/05/11/wslset/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>May 11, 2026</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/04/26/pwn-college%E4%B8%AD%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%8A%EF%BC%89/" title="pwn-college中格式化字符串的学习（上）">
+                        <span class="hidden-mobile">pwn-college中格式化字符串的学习（上）</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      &copy; 2024 PJ. Powered by <a href='https://hexo.io' target='_blank'>Hexo</a> &amp; <a href='https://github.com/fluid-dev/hexo-theme-fluid' target='_blank'>Fluid</a>.
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
