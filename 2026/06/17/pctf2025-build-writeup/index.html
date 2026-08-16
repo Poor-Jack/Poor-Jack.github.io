@@ -19,15 +19,15 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-    <meta name="description" content="pctf_week3_build_writeup很综合的一道题下载附件 背景知识rand()函数在执行之前需要一个种子，就是srand(),如果没有对种子进行随机化（如srand(time(1))），实际上就会自己执行srand(1)，这种情况下每次输出的“随机值”实际上都是一样的。 漏洞利用1234567$ .&#x2F;pwnWelcome to PCTFGift for you:0x7ffebadc7">
+    <meta name="description" content="很综合的一道题下载附件 背景知识rand()函数在执行之前需要一个种子，就是srand(),如果没有对种子进行随机化（如srand(time(1))），实际上就会自己执行srand(1)，这种情况下每次输出的“随机值”实际上都是一样的。 漏洞利用1234567$ .&#x2F;pwnWelcome to PCTFGift for you:0x7ffebadc7970Start your build And">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pctf_week3_build_writeup">
 <meta property="og:url" content="http://example.com/2026/06/17/pctf2025-build-writeup/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="pctf_week3_build_writeup很综合的一道题下载附件 背景知识rand()函数在执行之前需要一个种子，就是srand(),如果没有对种子进行随机化（如srand(time(1))），实际上就会自己执行srand(1)，这种情况下每次输出的“随机值”实际上都是一样的。 漏洞利用1234567$ .&#x2F;pwnWelcome to PCTFGift for you:0x7ffebadc7">
+<meta property="og:description" content="很综合的一道题下载附件 背景知识rand()函数在执行之前需要一个种子，就是srand(),如果没有对种子进行随机化（如srand(time(1))），实际上就会自己执行srand(1)，这种情况下每次输出的“随机值”实际上都是一样的。 漏洞利用1234567$ .&#x2F;pwnWelcome to PCTFGift for you:0x7ffebadc7970Start your build And">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-06-17T01:05:58.000Z">
-<meta property="article:modified_time" content="2026-06-14T01:07:18.475Z">
+<meta property="article:modified_time" content="2026-08-16T09:17:04.799Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="pctf">
 <meta property="article:tag" content="pwn">
@@ -304,7 +304,7 @@
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    Last updated on June 14, 2026 am
+                    Last updated on August 16, 2026 pm
                   
                 
               </p>
@@ -312,7 +312,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="pctf-week3-build-writeup"><a href="#pctf-week3-build-writeup" class="headerlink" title="pctf_week3_build_writeup"></a>pctf_week3_build_writeup</h1><p>很综合的一道题<br><a href="/attachment/build.zip">下载附件</a></p>
+                <p>很综合的一道题<br><a href="/attachment/build.zip">下载附件</a></p>
 <h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><p>rand()函数在执行之前需要一个种子，就是srand(),<br>如果没有对种子进行随机化（如srand(time(1))），实际上就会自己执行srand(1)，<br>这种情况下每次输出的“随机值”实际上都是一样的。</p>
 <h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ ./pwn<br>Welcome to PCTF<br>Gift <span class="hljs-keyword">for</span> you:0x7ffebadc7970<br>Start your build And Trigger the Magic!!!<br>Build 0:0<br>I forgot to tell you there are 2930885290 energy left totally... and Hope you won<span class="hljs-string">&#x27;t change the core energy.</span><br><span class="hljs-string">Build 1:^C</span><br></code></pre></td></tr></table></figure>
 
@@ -397,6 +397,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2026/08/16/26%E5%B9%B3%E8%88%AA%E6%9D%AF/" title="萌新的2026平航杯电子取证题目分析">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">萌新的2026平航杯电子取证题目分析</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

